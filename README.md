@@ -10,7 +10,7 @@ The platform fought me. The domain still works.
 
 ---
 
-**Live case study →** https://rahatislamanik-spec.github.io/anik-local/
+**Live case study →** https://rahatislamanik-spec.github.io/Windows-Server-2022-Enterprise-Domain/
 
 ---
 
