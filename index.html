@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Enterprise Windows Administration — Md Rahat Islam Anik</title>
+<title>Enterprise Windows Administration Lab</title>
 <link href="https://fonts.googleapis.com/css2?family=DM+Mono:ital,wght@0,300;0,400;0,500;1,400&family=Syne:wght@400;500;600;700;800&family=IBM+Plex+Sans:ital,wght@0,300;0,400;0,500;0,600;1,400&display=swap" rel="stylesheet">
 <style>
 :root {
@@ -554,7 +554,7 @@ footer p {
 <body>
 
 <nav>
-  <span class="nav-brand">// Rahat Islam Anik · Enterprise Windows Lab</span>
+  <span class="nav-brand">// Enterprise Windows Administration Lab</span>
   <ul class="nav-links">
     <li><a href="#overview">Overview</a></li>
     <li><a href="#part1">Client Admin</a></li>
@@ -565,16 +565,16 @@ footer p {
 
 <!-- HERO -->
 <section class="hero" id="overview">
-  <div class="hero-label">Self-Directed Case Study · George Brown College · Fall 2025</div>
+  <div class="hero-label">Self-Directed Case Study · Windows Endpoint & Server Administration</div>
   <h1>From the <span class="accent">Endpoint</span><br>to the <span class="accent">Domain</span></h1>
   <p class="hero-desc">
-    Two courses. Two environments. One lab-simulated enterprise Windows environment — built from scratch, documented step by step, and verified with screenshots. This case study covers Windows 11 workstation configuration from the client side, and Windows Server 2022 domain deployment from the server side.
+    Two environments. One lab-simulated enterprise Windows environment — built from scratch, documented step by step, and verified with screenshots. This case study covers Windows 11 workstation configuration from the client side, and Windows Server 2022 domain deployment from the server side.
   </p>
   <div class="hero-meta">
-    <span class="meta-chip highlight">George Brown College</span>
-    <span class="meta-chip">Cloud Computing & Network Admin (T465)</span>
-    <span class="meta-chip">Md Rahat Islam Anik</span>
-    <span class="meta-chip">Fall 2025</span>
+    <span class="meta-chip highlight">Windows Server 2022</span>
+    <span class="meta-chip">Windows 11 Enterprise</span>
+    <span class="meta-chip">AD DS · DHCP · DNS · GPO</span>
+    <span class="meta-chip">Evidence-Based Lab</span>
   </div>
 </section>
 
@@ -609,19 +609,19 @@ footer p {
   <div class="task-block" id="task1">
     <div class="task-header">
       <span class="task-num">TASK 01</span>
-      <span class="task-title">Install Windows 11 on VMware Fusion — Named to Lab Standard</span>
+      <span class="task-title">Install Windows 11 on VMware Fusion — Named to Lab Convention</span>
     </div>
     <div class="task-body">
       <p class="task-story">
-        Every enterprise build starts the same way — a blank virtual machine. For this task, I deployed a fresh Windows 11 installation inside <strong>VMware Fusion</strong> on my MacBook, naming the machine following the lab convention: <code>YourName-StudentID</code>. This was my first hands-on contact with desktop virtualization for the course, and it set the foundation for everything that followed.
+        Every enterprise build starts the same way — a blank virtual machine. For this task, I deployed a fresh Windows 11 installation inside <strong>VMware Fusion</strong> on my MacBook, using a consistent lab naming convention so each later configuration step could be traced clearly.
       </p>
       <p class="task-story">
-        Getting Windows 11 to install on Fusion required downloading the ISO, creating the VM with sufficient specs, and navigating through the Setup wizard. The machine name followed the required student lab convention during initial configuration — a detail that mattered for identification across every subsequent screenshot.
+        Getting Windows 11 to install on Fusion required downloading the ISO, creating the VM with sufficient specs, and navigating through the Setup wizard. The machine name followed the lab convention during initial configuration — a detail that mattered for identification across subsequent screenshots.
       </p>
       <div class="screenshots cols-2">
         <figure class="screenshot">
-      <img src="assets/screenshots/screenshot-001.jpg" alt="VMware Fusion — Windows 11 desktop running, student ID visible on desktop" loading="lazy">
-      <figcaption>VMware Fusion — Windows 11 desktop running, student ID visible on desktop</figcaption>
+      <img src="assets/screenshots/screenshot-001.jpg" alt="VMware Fusion — Windows 11 desktop running with identifiers redacted" loading="lazy">
+      <figcaption>VMware Fusion — Windows 11 desktop running with identifiers redacted</figcaption>
     </figure>
         <figure class="screenshot">
       <img src="assets/screenshots/screenshot-002.jpg" alt="VMware page & Windows 11 installation running side by side on macOS" loading="lazy">
@@ -636,8 +636,8 @@ footer p {
       <figcaption>VM resources configured — CPU, RAM, and storage allocated for Windows 11</figcaption>
     </figure>
         <figure class="screenshot">
-      <img src="assets/screenshots/screenshot-005.jpg" alt="Windows 11 successfully booted with student name on desktop" loading="lazy">
-      <figcaption>Windows 11 successfully booted with student name on desktop</figcaption>
+      <img src="assets/screenshots/screenshot-005.jpg" alt="Windows 11 successfully booted with public identifiers redacted" loading="lazy">
+      <figcaption>Windows 11 successfully booted with public identifiers redacted</figcaption>
     </figure>
       </div>
     </div>
@@ -651,7 +651,7 @@ footer p {
     </div>
     <div class="task-body">
       <p class="task-story">
-        In enterprise environments, IT teams rarely configure each PC manually — they use <strong>provisioning packages</strong> to automate setup. This task required creating a .ppkg file using <strong>Windows Configuration Designer (WCD)</strong> that would automatically create a local administrator account called <code>AnAdmin</code> with lab-only sign-in details and apply it to the VM.
+        In enterprise environments, IT teams rarely configure each PC manually — they use <strong>provisioning packages</strong> to automate setup. This task required creating a .ppkg file using <strong>Windows Configuration Designer (WCD)</strong> that would create a lab-only local administrator account and apply it to the VM.
       </p>
       <p class="task-story">
         I built the package step by step in WCD: selecting the account settings, defining local sign-in details, exporting the .ppkg file, and then applying it to the Windows 11 VM. After application, the account appeared under local users — confirming the package deployed correctly.
@@ -682,8 +682,8 @@ footer p {
       <figcaption>Package installation confirmation — applying settings</figcaption>
     </figure>
         <figure class="screenshot">
-      <img src="assets/screenshots/screenshot-012.jpg" alt="Local Users and Groups — AnAdmin account appears post-provisioning" loading="lazy">
-      <figcaption>Local Users and Groups — AnAdmin account appears post-provisioning</figcaption>
+      <img src="assets/screenshots/screenshot-012.jpg" alt="Local Users and Groups — lab admin account appears post-provisioning" loading="lazy">
+      <figcaption>Local Users and Groups — lab admin account appears post-provisioning</figcaption>
     </figure>
         <figure class="screenshot">
       <img src="assets/screenshots/screenshot-013.jpg" alt="Account verified in Computer Management" loading="lazy">
@@ -712,7 +712,7 @@ footer p {
       </p>
       <div class="tech-note">
         <span class="tech-note-icon">⚠</span>
-        <p>Note: Some screens show the taskbar without my student name visible — because the UAC configuration window covered the desktop. All work was performed on my MacBook and the taskbar style is consistent throughout the project.</p>
+        <p>Note: Some screens include redaction where lab identifiers appeared. The visible policy windows remain the relevant evidence for this task.</p>
       </div>
       <div class="screenshots cols-2">
         <figure class="screenshot">
@@ -811,11 +811,11 @@ footer p {
   <div class="task-block" id="task5">
     <div class="task-header">
       <span class="task-num">TASK 05</span>
-      <span class="task-title">PowerShell Network Configuration — Set Static IP 192.168.168.101/24</span>
+      <span class="task-title">PowerShell Network Configuration — Set Static IPv4 Address</span>
     </div>
     <div class="task-body">
       <p class="task-story">
-        Network configuration via PowerShell is a core sysadmin skill. Rather than using the GUI, this task required setting a <strong>static IPv4 address</strong> of <code>192.168.168.101/24</code> directly through the command line using <code>New-NetIPAddress</code>. This approach is scriptable, repeatable, and deployable at scale — exactly how enterprise teams manage endpoints.
+        Network configuration via PowerShell is a core sysadmin skill. Rather than using the GUI, this task required setting a <strong>static IPv4 address</strong> of <code>redacted lab IPv4 address</code> directly through the command line using <code>New-NetIPAddress</code>. This approach is scriptable, repeatable, and deployable at scale — exactly how enterprise teams manage endpoints.
       </p>
       <p class="task-story">
         I identified the correct adapter using <code>Get-NetAdapter</code>, removed any existing DHCP-assigned address, and applied the static configuration. Running <code>ipconfig /all</code> after confirmed the address was correctly assigned to the adapter.
@@ -826,8 +826,8 @@ footer p {
       <figcaption>PowerShell — Get-NetAdapter showing available network interfaces</figcaption>
     </figure>
         <figure class="screenshot">
-      <img src="assets/screenshots/screenshot-033.jpg" alt="New-NetIPAddress command executed — static IP 192.168.168.101/24 applied" loading="lazy">
-      <figcaption>New-NetIPAddress command executed — static IP 192.168.168.101/24 applied</figcaption>
+      <img src="assets/screenshots/screenshot-033.jpg" alt="New-NetIPAddress command executed — static IP redacted lab IPv4 address applied" loading="lazy">
+      <figcaption>New-NetIPAddress command executed — static IP redacted lab IPv4 address applied</figcaption>
     </figure>
         <figure class="screenshot">
       <img src="assets/screenshots/screenshot-034.jpg" alt="ipconfig /all output — static IP confirmed on adapter" loading="lazy">
@@ -838,8 +838,8 @@ footer p {
       <figcaption>Network adapter properties — static IP visible in settings</figcaption>
     </figure>
         <figure class="screenshot">
-      <img src="assets/screenshots/screenshot-036.jpg" alt="Final verification — adapter showing 192.168.168.101 assigned" loading="lazy">
-      <figcaption>Final verification — adapter showing 192.168.168.101 assigned</figcaption>
+      <img src="assets/screenshots/screenshot-036.jpg" alt="Final verification — adapter showing redacted lab IPv4 address assigned" loading="lazy">
+      <figcaption>Final verification — adapter showing redacted lab IPv4 address assigned</figcaption>
     </figure>
       </div>
     </div>
@@ -1051,7 +1051,7 @@ footer p {
   <div class="part-banner-inner">
     <div class="part-number">02</div>
     <div class="part-content">
-      <h2>Windows Server 2022 Enterprise Domain — anik.local</h2>
+      <h2>Windows Server 2022 Enterprise Domain</h2>
       <p>Building a full multi-server Windows Server 2022 domain from the ground up inside UTM on an Apple Silicon MacBook — two servers, one workstation, a complete Active Directory domain, DHCP, DNS, GPOs, and file services, all verified and documented.</p>
       <div class="part-badges">
         <span class="badge badge-blue">Windows Server 2022</span>
@@ -1075,15 +1075,15 @@ footer p {
     </div>
     <div class="task-body">
       <p class="task-story">
-        The first challenge wasn't the server — it was the hardware. Building Windows Server 2022 on an <strong>Apple Silicon MacBook Air</strong> required using <strong>UTM</strong>, a virtualization platform for macOS that supports both ARM and x86 emulation. I created the primary Domain Controller VM (<code>CLCT4003-1DC-MdRahatIslamAnik</code>) with <strong>4 vCPUs, 8GB RAM, and 64GB storage</strong> in x86_64 mode, then installed Windows Server 2022 Datacenter Evaluation (Desktop Experience) for full GUI access.
+        The first challenge wasn't the server — it was the hardware. Building Windows Server 2022 on an <strong>Apple Silicon MacBook Air</strong> required using <strong>UTM</strong>, a virtualization platform for macOS that supports both ARM and x86 emulation. I created the primary Domain Controller VM (<code>LAB-DC01</code>) with <strong>4 vCPUs, 8GB RAM, and 64GB storage</strong> in x86_64 mode, then installed Windows Server 2022 Datacenter Evaluation (Desktop Experience) for full GUI access.
       </p>
       <div class="highlight-box">
         <p><strong>VM Specs — SRV01 (Domain Controller):</strong> 4 vCPUs · 8 GB RAM · 64 GB storage · x86_64 architecture · Windows Server 2022 Datacenter Evaluation (Desktop Experience)</p>
       </div>
       <div class="screenshots cols-2">
         <figure class="screenshot">
-      <img src="assets/screenshots/screenshot-065.jpg" alt="UTM VM configuration — CLCT4003-1DC-MdRahatIslamAnik setup notes" loading="lazy">
-      <figcaption>UTM VM configuration — CLCT4003-1DC-MdRahatIslamAnik setup notes</figcaption>
+      <img src="assets/screenshots/screenshot-065.jpg" alt="UTM VM configuration evidence with identifiers redacted" loading="lazy">
+      <figcaption>UTM VM configuration evidence with identifiers redacted</figcaption>
     </figure>
         <figure class="screenshot">
       <img src="assets/screenshots/screenshot-066.jpg" alt="UTM VM resource summary — 4 vCPUs, 8GB RAM, 64GB storage confirmed" loading="lazy">
@@ -1121,10 +1121,10 @@ footer p {
     </div>
     <div class="task-body">
       <p class="task-story">
-        This was the moment the server transformed from a standalone box into the <strong>authority of an enterprise domain</strong>. I installed the <strong>AD DS role</strong> through Server Manager's Add Roles and Features Wizard, selected CLCT4003-1DC-MdRahatIslamAnik as the target, and began the promotion process. Choosing <strong>"Add a new forest"</strong> created the root domain: <code>anik.local</code>.
+        This was the moment the server transformed from a standalone box into the <strong>authority of a lab Active Directory domain</strong>. I installed the <strong>AD DS role</strong> through Server Manager's Add Roles and Features Wizard, selected the lab domain controller as the target, and began the promotion process. Choosing <strong>"Add a new forest"</strong> created the lab-local root domain.
       </p>
       <p class="task-story">
-        The promotion wizard walked through DNS integration, Global Catalog designation, recovery-mode setup, and confirmed the NetBIOS name <strong>ANIK</strong>. The wizard auto-generated a PowerShell deployment script — proof the configuration could be repeated and automated. After the final prerequisites check passed (with the expected DNS delegation warning in an isolated lab), the server rebooted and came back online as the domain controller of <code>anik.local</code>.
+        The promotion wizard walked through DNS integration, Global Catalog designation, recovery-mode setup, and NetBIOS naming. The wizard auto-generated a PowerShell deployment script, showing that the configuration could be repeated and automated. After the final prerequisites check passed with the expected DNS delegation warning in an isolated lab, the server rebooted and came back online as the domain controller.
       </p>
       <div class="screenshots cols-3">
         <figure class="screenshot">
@@ -1136,8 +1136,8 @@ footer p {
       <figcaption>Add Roles and Features Wizard — Before You Begin</figcaption>
     </figure>
         <figure class="screenshot">
-      <img src="assets/screenshots/screenshot-074.jpg" alt="Selecting CLCT4003-1DC as the destination server" loading="lazy">
-      <figcaption>Selecting CLCT4003-1DC as the destination server</figcaption>
+      <img src="assets/screenshots/screenshot-074.jpg" alt="Selecting the lab domain controller as the destination server" loading="lazy">
+      <figcaption>Selecting the lab domain controller as the destination server</figcaption>
     </figure>
         <figure class="screenshot">
       <img src="assets/screenshots/screenshot-075.jpg" alt="AD DS role selected for installation" loading="lazy">
@@ -1156,8 +1156,8 @@ footer p {
       <figcaption>AD DS installation in progress on SRV01</figcaption>
     </figure>
         <figure class="screenshot">
-      <img src="assets/screenshots/screenshot-079.jpg" alt="AD DS Configuration Wizard — Add New Forest selected, anik.local entered" loading="lazy">
-      <figcaption>AD DS Configuration Wizard — Add New Forest selected, anik.local entered</figcaption>
+      <img src="assets/screenshots/screenshot-079.jpg" alt="AD DS Configuration Wizard — Add New Forest selected for lab domain" loading="lazy">
+      <figcaption>AD DS Configuration Wizard — Add New Forest selected for lab domain</figcaption>
     </figure>
         <figure class="screenshot">
       <img src="assets/screenshots/screenshot-080.jpg" alt="Domain Controller Options — DNS and Global Catalog enabled" loading="lazy">
@@ -1195,13 +1195,13 @@ footer p {
     </div>
     <div class="task-body">
       <p class="task-story">
-        With the domain running, the next critical service was <strong>DHCP</strong> — the mechanism by which every client gets an IP address, gateway, and DNS server automatically. I installed the DHCP Server role on SRV01, first assigning a <strong>static IPv4 address</strong> to the server (<code>192.168.6.10/24</code>) to ensure DHCP and DNS services were anchored to a fixed address.
+        With the domain running, the next critical service was <strong>DHCP</strong> — the mechanism by which clients receive an IP address, gateway, and DNS server automatically. I installed the DHCP Server role on the domain controller after assigning a static IPv4 address so DHCP and DNS services were anchored to a fixed address.
       </p>
       <p class="task-story">
         I created multiple scopes to simulate a <strong>multi-site enterprise network</strong> with offices in Toronto and Montreal. Each scope was configured with the correct subnet, IP range, exclusions, and scope options (Router 003, DNS Server 006, DNS Domain Name 015). A DHCP reservation for SRV02 ensured it would always receive the same IP regardless of lease renewal.
       </p>
       <div class="highlight-box">
-        <p><strong>Scopes created:</strong> <code>10.10.10.0</code> Toronto Lab · <code>10.10.20.0</code> Toronto Office · <code>10.10.30.0</code> Montreal Lab · <code>10.10.40.0</code> Montreal Office · <code>192.168.6.0</code> CLCT4003-SCOPE (primary lab)</p>
+        <p><strong>Scopes created:</strong> one primary lab subnet plus four simulated site scopes for Toronto and Montreal lab/office segments.</p>
       </div>
       <div class="screenshots cols-3">
         <figure class="screenshot">
@@ -1209,8 +1209,8 @@ footer p {
       <figcaption>DHCP installation warning — static IP required before proceeding</figcaption>
     </figure>
         <figure class="screenshot">
-      <img src="assets/screenshots/screenshot-087.jpg" alt="Static IPv4 192.168.6.10/24 applied to SRV01" loading="lazy">
-      <figcaption>Static IPv4 192.168.6.10/24 applied to SRV01</figcaption>
+      <img src="assets/screenshots/screenshot-087.jpg" alt="Static IPv4 address applied to the domain controller" loading="lazy">
+      <figcaption>Static IPv4 address applied to the domain controller</figcaption>
     </figure>
         <figure class="screenshot">
       <img src="assets/screenshots/screenshot-088.jpg" alt="DHCP Server role selected for installation" loading="lazy">
@@ -1221,16 +1221,16 @@ footer p {
       <figcaption>DHCP Server role installation in progress</figcaption>
     </figure>
         <figure class="screenshot">
-      <img src="assets/screenshots/screenshot-090.jpg" alt="New Scope Wizard — CLCT4003-SCOPE named and described" loading="lazy">
-      <figcaption>New Scope Wizard — CLCT4003-SCOPE named and described</figcaption>
+      <img src="assets/screenshots/screenshot-090.jpg" alt="New Scope Wizard — primary lab scope named and described" loading="lazy">
+      <figcaption>New Scope Wizard — primary lab scope named and described</figcaption>
     </figure>
         <figure class="screenshot">
       <img src="assets/screenshots/screenshot-091.jpg" alt="DHCP scope activated — Yes, activate now selected" loading="lazy">
       <figcaption>DHCP scope activated — Yes, activate now selected</figcaption>
     </figure>
         <figure class="screenshot">
-      <img src="assets/screenshots/screenshot-092.jpg" alt="CLCT4003-SCOPE visible and active under IPv4 in DHCP Manager" loading="lazy">
-      <figcaption>CLCT4003-SCOPE visible and active under IPv4 in DHCP Manager</figcaption>
+      <img src="assets/screenshots/screenshot-092.jpg" alt="Primary lab scope visible and active under IPv4 in DHCP Manager" loading="lazy">
+      <figcaption>Primary lab scope visible and active under IPv4 in DHCP Manager</figcaption>
     </figure>
         <figure class="screenshot">
       <img src="assets/screenshots/screenshot-093.jpg" alt="Multiple scopes visible — Toronto and Montreal sites all configured" loading="lazy">
@@ -1248,10 +1248,10 @@ footer p {
     </div>
     <div class="task-body">
       <p class="task-story">
-        A single-server domain is a lab — an enterprise network needs member servers. I deployed a second Windows Server 2022 VM, <strong>CLCT4003-SRV02-MdRahatIslamAnik</strong>, as a member server for domain lab services. The process mirrored SRV01's installation: create the UTM VM, install Windows Server 2022 Datacenter, complete first-time setup, rename the machine, and then complete the domain join to <code>anik.local</code>.
+        A single-server domain is a lab — an enterprise network normally includes member servers. I deployed a second Windows Server 2022 VM, <strong>LAB-SRV02</strong>, as a member server for domain lab services. The process mirrored the first server installation: create the UTM VM, install Windows Server 2022 Datacenter, complete first-time setup, rename the machine, and then complete the domain join.
       </p>
       <p class="task-story">
-        Joining the domain required pointing SRV02's DNS to the domain controller, completing domain authentication, and confirming the "Welcome to the anik.local domain" message. A static IP and DHCP reservation were then configured, with the VM's MAC address logged for the reservation record.
+        Joining the domain required pointing the member server's DNS to the domain controller, completing domain authentication, and confirming the successful domain join. A static IP and DHCP reservation were then configured, with hardware identifiers redacted in public evidence.
       </p>
       <div class="screenshots cols-3">
         <figure class="screenshot">
@@ -1287,12 +1287,12 @@ footer p {
       <figcaption>Server Manager on SRV02 — local server properties on first login</figcaption>
     </figure>
         <figure class="screenshot">
-      <img src="assets/screenshots/screenshot-102.jpg" alt="SRV02 renamed to CLCT4003-SRV02 — restart required" loading="lazy">
-      <figcaption>SRV02 renamed to CLCT4003-SRV02 — restart required</figcaption>
+      <img src="assets/screenshots/screenshot-102.jpg" alt="Member server renamed to lab convention — restart required" loading="lazy">
+      <figcaption>Member server renamed to lab convention — restart required</figcaption>
     </figure>
         <figure class="screenshot">
-      <img src="assets/screenshots/screenshot-103.jpg" alt="SRV02 successfully joined to anik.local domain" loading="lazy">
-      <figcaption>SRV02 successfully joined to anik.local domain</figcaption>
+      <img src="assets/screenshots/screenshot-103.jpg" alt="Member server successfully joined to the lab domain" loading="lazy">
+      <figcaption>Member server successfully joined to the lab domain</figcaption>
     </figure>
         <figure class="screenshot">
       <img src="assets/screenshots/screenshot-104.jpg" alt="Logging into SRV02 with domain authentication" loading="lazy">
@@ -1330,15 +1330,15 @@ footer p {
     </div>
     <div class="task-body">
       <p class="task-story">
-        Active Directory's power comes from organization. I opened <strong>Active Directory Users and Computers (ADUC)</strong> on the domain controller and built a full OU hierarchy under <code>anik.local</code>: <strong>Toronto</strong>, <strong>Montreal</strong>, <strong>Servers</strong>, <strong>Workstations</strong>, <strong>Groups</strong>, and <strong>Users</strong> — mirroring how a real enterprise organizes its directory structure by geography and function.
+        Active Directory's power comes from organization. I opened <strong>Active Directory Users and Computers (ADUC)</strong> on the domain controller and built a full OU hierarchy under <code>lab.local</code>: <strong>Toronto</strong>, <strong>Montreal</strong>, <strong>Servers</strong>, <strong>Workstations</strong>, <strong>Groups</strong>, and <strong>Users</strong> — mirroring how a real enterprise organizes its directory structure by geography and function.
       </p>
       <p class="task-story">
-        Inside each location OU, I created user accounts with proper UPN suffixes (<code>toronto.user@anik.local</code>, <code>montreal.user@anik.local</code>), enforced first-logon account-change policies, and built <strong>Global Security Groups</strong> — <strong>Toronto-Users</strong> and <strong>Montreal-Users</strong> — adding each user to their respective group. This group structure would directly drive NTFS permissions and GPO filtering later.
+        Inside each location OU, I created user accounts with proper UPN suffixes (<code>lab user account</code>, <code>lab user account</code>), enforced first-logon account-change policies, and built <strong>Global Security Groups</strong> — <strong>Toronto-Users</strong> and <strong>Montreal-Users</strong> — adding each user to their respective group. This group structure would directly drive NTFS permissions and GPO filtering later.
       </p>
       <div class="screenshots cols-3">
         <figure class="screenshot">
-      <img src="assets/screenshots/screenshot-110.jpg" alt="ADUC open — default domain container anik.local" loading="lazy">
-      <figcaption>ADUC open — default domain container anik.local</figcaption>
+      <img src="assets/screenshots/screenshot-110.jpg" alt="ADUC open — default domain container lab.local" loading="lazy">
+      <figcaption>ADUC open — default domain container lab.local</figcaption>
     </figure>
         <figure class="screenshot">
       <img src="assets/screenshots/screenshot-111.jpg" alt="OU creation — Montreal and Toronto OUs being built" loading="lazy">
@@ -1357,8 +1357,8 @@ footer p {
       <figcaption>Final OU structure: Montreal, Toronto, Servers, Workstations, Groups, Users</figcaption>
     </figure>
         <figure class="screenshot">
-      <img src="assets/screenshots/screenshot-115.jpg" alt="New user creation — montreal.user@anik.local in Montreal OU" loading="lazy">
-      <figcaption>New user creation — montreal.user@anik.local in Montreal OU</figcaption>
+      <img src="assets/screenshots/screenshot-115.jpg" alt="New user creation — lab user account in Montreal OU" loading="lazy">
+      <figcaption>New user creation — lab user account in Montreal OU</figcaption>
     </figure>
         <figure class="screenshot">
       <img src="assets/screenshots/screenshot-116.jpg" alt="Account policy for Montreal user — change at next logon enabled" loading="lazy">
@@ -1369,16 +1369,16 @@ footer p {
       <figcaption>Montreal user account successfully created</figcaption>
     </figure>
         <figure class="screenshot">
-      <img src="assets/screenshots/screenshot-118.jpg" alt="Montreal OU showing montreal.user object" loading="lazy">
-      <figcaption>Montreal OU showing montreal.user object</figcaption>
+      <img src="assets/screenshots/screenshot-118.jpg" alt="Montreal OU showing lab user object" loading="lazy">
+      <figcaption>Montreal OU showing lab user object</figcaption>
     </figure>
         <figure class="screenshot">
-      <img src="assets/screenshots/screenshot-119.jpg" alt="Creating Toronto user — toronto.user@anik.local" loading="lazy">
-      <figcaption>Creating Toronto user — toronto.user@anik.local</figcaption>
+      <img src="assets/screenshots/screenshot-119.jpg" alt="Creating Toronto user — lab user account" loading="lazy">
+      <figcaption>Creating Toronto user — lab user account</figcaption>
     </figure>
         <figure class="screenshot">
-      <img src="assets/screenshots/screenshot-120.jpg" alt="Toronto OU showing toronto.user object" loading="lazy">
-      <figcaption>Toronto OU showing toronto.user object</figcaption>
+      <img src="assets/screenshots/screenshot-120.jpg" alt="Toronto OU showing lab user object" loading="lazy">
+      <figcaption>Toronto OU showing lab user object</figcaption>
     </figure>
         <figure class="screenshot">
       <img src="assets/screenshots/screenshot-121.jpg" alt="Creating Toronto-Users security group — Global/Security type" loading="lazy">
@@ -1389,8 +1389,8 @@ footer p {
       <figcaption>Toronto-Users group successfully created in Groups OU</figcaption>
     </figure>
         <figure class="screenshot">
-      <img src="assets/screenshots/screenshot-123.jpg" alt="Adding toronto.user to Toronto-Users group" loading="lazy">
-      <figcaption>Adding toronto.user to Toronto-Users group</figcaption>
+      <img src="assets/screenshots/screenshot-123.jpg" alt="Adding lab user to Toronto-Users group" loading="lazy">
+      <figcaption>Adding lab user to Toronto-Users group</figcaption>
     </figure>
         <figure class="screenshot">
       <img src="assets/screenshots/screenshot-124.jpg" alt="Toronto user confirmed as member of Toronto-Users" loading="lazy">
@@ -1401,8 +1401,8 @@ footer p {
       <figcaption>Both Toronto-Users and Montreal-Users groups visible in Groups OU</figcaption>
     </figure>
         <figure class="screenshot">
-      <img src="assets/screenshots/screenshot-126.jpg" alt="Montreal-Users group membership — montreal.user added" loading="lazy">
-      <figcaption>Montreal-Users group membership — montreal.user added</figcaption>
+      <img src="assets/screenshots/screenshot-126.jpg" alt="Montreal-Users group membership — lab user added" loading="lazy">
+      <figcaption>Montreal-Users group membership — lab user added</figcaption>
     </figure>
       </div>
     </div>
@@ -1426,8 +1426,8 @@ footer p {
       </p>
       <div class="screenshots cols-3">
         <figure class="screenshot">
-      <img src="assets/screenshots/screenshot-127.jpg" alt="Group Policy Management Console open — anik.local domain structure" loading="lazy">
-      <figcaption>Group Policy Management Console open — anik.local domain structure</figcaption>
+      <img src="assets/screenshots/screenshot-127.jpg" alt="Group Policy Management Console open — lab.local domain structure" loading="lazy">
+      <figcaption>Group Policy Management Console open — lab.local domain structure</figcaption>
     </figure>
         <figure class="screenshot">
       <img src="assets/screenshots/screenshot-128.jpg" alt="Default Domain Policy — GPO tree structure viewed" loading="lazy">
@@ -1535,7 +1535,7 @@ footer p {
     </div>
     <div class="task-body">
       <p class="task-story">
-        DNS is the backbone of an Active Directory domain — without it, nothing resolves. I opened <strong>DNS Manager</strong> on the domain controller, reviewed the server's network interface bindings, and configured an <strong>external DNS forwarder</strong> (Google DNS <code>8.8.8.8</code>) to handle queries outside the <code>anik.local</code> namespace.
+        DNS is the backbone of an Active Directory domain — without it, nothing resolves. I opened <strong>DNS Manager</strong> on the domain controller, reviewed the server's network interface bindings, and configured an <strong>external DNS forwarder</strong> (Google DNS <code>external DNS forwarder</code>) to handle queries outside the <code>lab.local</code> namespace.
       </p>
       <div class="tech-note">
         <span class="tech-note-icon">ℹ</span>
@@ -1543,20 +1543,20 @@ footer p {
       </div>
       <div class="screenshots cols-3">
         <figure class="screenshot">
-      <img src="assets/screenshots/screenshot-147.jpg" alt="DNS Manager open on CLCT4003-1DC — server interfaces reviewed" loading="lazy">
-      <figcaption>DNS Manager open on CLCT4003-1DC — server interfaces reviewed</figcaption>
+      <img src="assets/screenshots/screenshot-147.jpg" alt="DNS Manager open on LAB-DC01 — server interfaces reviewed" loading="lazy">
+      <figcaption>DNS Manager open on LAB-DC01 — server interfaces reviewed</figcaption>
     </figure>
         <figure class="screenshot">
-      <img src="assets/screenshots/screenshot-148.jpg" alt="DNS Forwarders — 8.8.8.8 added as external forwarder" loading="lazy">
-      <figcaption>DNS Forwarders — 8.8.8.8 added as external forwarder</figcaption>
+      <img src="assets/screenshots/screenshot-148.jpg" alt="DNS Forwarders — external resolver configured for lab testing" loading="lazy">
+      <figcaption>DNS Forwarders — external resolver configured for lab testing</figcaption>
     </figure>
         <figure class="screenshot">
       <img src="assets/screenshots/screenshot-149.jpg" alt="nslookup test — timeout expected due to UTM NAT-only networking" loading="lazy">
       <figcaption>nslookup test — timeout expected due to UTM NAT-only networking</figcaption>
     </figure>
         <figure class="screenshot">
-      <img src="assets/screenshots/screenshot-150.jpg" alt="DNS zones visible — anik.local forward and reverse lookup zones" loading="lazy">
-      <figcaption>DNS zones visible — anik.local forward and reverse lookup zones</figcaption>
+      <img src="assets/screenshots/screenshot-150.jpg" alt="DNS zones visible — lab.local forward and reverse lookup zones" loading="lazy">
+      <figcaption>DNS zones visible — lab.local forward and reverse lookup zones</figcaption>
     </figure>
       </div>
     </div>
@@ -1566,35 +1566,35 @@ footer p {
   <div class="task-block" id="phase9">
     <div class="task-header">
       <span class="task-num">PHASE 09</span>
-      <span class="task-title">Workstation Integration — Joining anik.local &amp; Verifying Everything Works</span>
+      <span class="task-title">Workstation Integration — Joining the Lab Domain &amp; Verifying Services</span>
     </div>
     <div class="task-body">
       <p class="task-story">
-        The final proof of a working domain is the workstation. I configured the Windows 11 VM (<code>GB-WS-02-ANIK</code>) with DNS pointing to the domain controller, verified a successful <code>ping</code> to the DC, and ran <code>nslookup</code> to confirm name resolution. The domain join prompt required domain authentication — and returned the "<strong>Welcome to the anik.local domain</strong>" confirmation.
+        The final proof of a working domain is the workstation. I configured the Windows 11 VM (<code>LAB-WS01</code>) with DNS pointing to the domain controller, verified a successful <code>ping</code> to the DC, and ran <code>nslookup</code> to confirm name resolution. The domain join prompt required domain authentication — and returned the "<strong>Welcome to the lab domain</strong>" confirmation.
       </p>
       <p class="task-story">
         Post-join, the workstation received its DHCP-assigned IP, applied both computer and user GPOs (confirmed via <code>gpresult /r</code>), and successfully connected to the CompanyShare folder. Every service built throughout this case study — DHCP, DNS, AD DS, GPO, file sharing — was verified to be working end-to-end from a domain-joined client.
       </p>
       <div class="screenshots cols-3">
         <figure class="screenshot">
-      <img src="assets/screenshots/screenshot-151.jpg" alt="Workstation system properties — hostname GB-WS-02-ANIK, currently in WORKGROUP" loading="lazy">
-      <figcaption>Workstation system properties — hostname GB-WS-02-ANIK, currently in WORKGROUP</figcaption>
+      <img src="assets/screenshots/screenshot-151.jpg" alt="Workstation system properties — hostname LAB-WS01, currently in WORKGROUP" loading="lazy">
+      <figcaption>Workstation system properties — hostname LAB-WS01, currently in WORKGROUP</figcaption>
     </figure>
         <figure class="screenshot">
-      <img src="assets/screenshots/screenshot-152.jpg" alt="ipconfig — workstation received 192.168.10.50, DNS set to 192.168.10.10" loading="lazy">
-      <figcaption>ipconfig — workstation received 192.168.10.50, DNS set to 192.168.10.10</figcaption>
+      <img src="assets/screenshots/screenshot-152.jpg" alt="ipconfig — workstation lease and DNS settings verified" loading="lazy">
+      <figcaption>ipconfig — workstation lease and DNS settings verified</figcaption>
     </figure>
         <figure class="screenshot">
-      <img src="assets/screenshots/screenshot-153.jpg" alt="Ping to domain controller 192.168.10.10 — successful, network confirmed" loading="lazy">
-      <figcaption>Ping to domain controller 192.168.10.10 — successful, network confirmed</figcaption>
+      <img src="assets/screenshots/screenshot-153.jpg" alt="Ping to domain controller — successful, network confirmed" loading="lazy">
+      <figcaption>Ping to domain controller — successful, network confirmed</figcaption>
     </figure>
         <figure class="screenshot">
-      <img src="assets/screenshots/screenshot-154.jpg" alt="Domain join prompt — completing anik.local authentication" loading="lazy">
-      <figcaption>Domain join prompt — completing anik.local authentication</figcaption>
+      <img src="assets/screenshots/screenshot-154.jpg" alt="Domain join prompt — completing lab.local authentication" loading="lazy">
+      <figcaption>Domain join prompt — completing lab.local authentication</figcaption>
     </figure>
         <figure class="screenshot">
-      <img src="assets/screenshots/screenshot-155.jpg" alt="Welcome to the anik.local domain — domain join confirmed" loading="lazy">
-      <figcaption>Welcome to the anik.local domain — domain join confirmed</figcaption>
+      <img src="assets/screenshots/screenshot-155.jpg" alt="Welcome to the lab domain — domain join confirmed" loading="lazy">
+      <figcaption>Welcome to the lab domain — domain join confirmed</figcaption>
     </figure>
         <figure class="screenshot">
       <img src="assets/screenshots/screenshot-156.jpg" alt="DHCP verification — ipconfig /all showing correct lease from Toronto scope" loading="lazy">
@@ -1655,7 +1655,7 @@ footer p {
 </div>
 
 <footer>
-  <p>MD RAHAT ISLAM ANIK · GEORGE BROWN COLLEGE · CLOUD COMPUTING & NETWORK ADMINISTRATION T465 · FALL 2025</p>
+  <p>WINDOWS ENDPOINT & SERVER ADMINISTRATION LAB · PUBLIC EVIDENCE REDACTED</p>
   <p>GITHUB: RAHATISLAMANIK-SPEC · LINKEDIN: RAHATISLAMANIK</p>
 </footer>
 

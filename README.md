@@ -1,7 +1,7 @@
 # Enterprise Windows Administration
 ### From the Endpoint to the Domain — A Lab Case Study
 
-**Md Rahat Islam Anik · George Brown College · Cloud Computing & Network Administration (T465) · Fall 2025**
+**Md Rahat Islam Anik · Windows Endpoint & Server Administration Lab**
 
 [![Live Case Study](https://img.shields.io/badge/Live%20Case%20Study-View%20Now-0078D4?style=for-the-badge&logo=windows&logoColor=white)](https://rahatislamanik-spec.github.io/Windows-Server-2022-Enterprise-Domain/)
 [![LinkedIn](https://img.shields.io/badge/LinkedIn-rahatislamanik-0A66C2?style=for-the-badge&logo=linkedin&logoColor=white)](https://linkedin.com/in/rahatislamanik)
@@ -20,30 +20,40 @@ This repository documents a lab-simulated enterprise Windows environment built o
 
 The live case study is intentionally evidence-heavy: each task is paired with screenshots so a reviewer can see what was configured and how it was verified.
 
+## What This Demonstrates for Reviewers
+
+| Skill area | Evidence in this repo |
+|---|---|
+| Windows endpoint administration | Windows 11 provisioning, local security policy, UAC behavior, Storage Spaces, File History, local sharing |
+| Windows Server administration | Server role installation, AD DS promotion workflow, DHCP, DNS, file services, domain-joined workstation checks |
+| Identity and access operations | OUs, lab users, security groups, share/NTFS permissions, domain authentication validation |
+| Troubleshooting and constraints | NAT-only virtualization notes, DNS forwarder limitation, Apple Silicon lab constraints |
+| Documentation discipline | 158 screenshots, task-by-task evidence map, recruiter-readable case study page |
+
 ---
 
 ## The Setup
 
 No rack. No lab. No x86 hardware.
 
-This project was built entirely on a **MacBook Air (Apple Silicon)** — which meant no PXE booting, no bridged network adapters, and no Hyper-V. Everything that typically "just works" in a proper lab had to be thought through differently. Two separate virtualization platforms were used across two courses: **VMware Fusion** for the Windows 11 client environment, and **UTM** for the full Windows Server 2022 domain.
+This project was built entirely on a **MacBook Air (Apple Silicon)** — which meant no PXE booting, no bridged network adapters, and no Hyper-V. Everything that typically "just works" in a traditional lab had to be thought through differently. Two virtualization platforms were used: **VMware Fusion** for the Windows 11 client environment, and **UTM** for the Windows Server 2022 domain environment.
 
 What came out the other side: a documented, end-to-end enterprise Windows lab — from the endpoint to the domain — with 158 screenshots capturing configuration and verification steps along the way.
 
-> **Public portfolio note:** This was a simulated college lab environment, not a production network. Public documentation is limited to lab-safe configuration evidence.
+> **Public portfolio note:** This was a simulated lab environment, not a production network. Public documentation is limited to lab-safe configuration evidence, and screenshots have been redacted where identifiers were visible.
 
 ---
 
 ## Part 1 — Windows 11 Enterprise Workstation Administration
 
-> **Platform:** VMware Fusion · **OS:** Windows 11 · **Machine Name:** student lab naming convention
+> **Platform:** VMware Fusion · **OS:** Windows 11 · **Machine Name:** lab-safe workstation naming convention
 
-This section covers the deployment, configuration, and hardening of a Windows 11 enterprise workstation from scratch inside **VMware Fusion on macOS**. Every task mirrors real-world enterprise IT operations — provisioning, security policy enforcement, local storage management, and file sharing.
+This section covers the deployment, configuration, and baseline hardening of a Windows 11 enterprise workstation from scratch inside **VMware Fusion on macOS**. The tasks map to common enterprise IT operations: provisioning, local security policy, network configuration, storage management, and file sharing.
 
 ### What Was Built
 
 **Task 01 — Provisioning & Naming**
-Deployed a fresh Windows 11 VM inside VMware Fusion. Machine named to the required student lab convention during initial setup — a detail enforced across subsequent screenshots and configurations.
+Deployed a fresh Windows 11 VM inside VMware Fusion. The machine was named to a consistent lab convention during initial setup so later configuration and evidence could be tracked clearly.
 
 **Task 02 — Local Security Policy**
 Configured local Group Policy settings: account lockout thresholds, account security requirements, and audit policies. Verified enforcement via `secpol.msc` and event log review.
@@ -63,27 +73,27 @@ Configured shared folders with explicit share permissions and layered NTFS permi
 |---|---|
 | Virtualization | VMware Fusion (macOS host) |
 | Operating System | Windows 11 Enterprise |
-| Machine Name | Student lab naming convention |
+| Machine Name | Lab workstation naming convention |
 | Host Hardware | MacBook Air (Apple Silicon) |
 | Network | NAT (Fusion-managed) |
 
 ---
 
-## Part 2 — Windows Server 2022 Enterprise Domain: `anik.local`
+## Part 2 — Windows Server 2022 Enterprise Domain
 
-> **Platform:** UTM (Apple Silicon) · **Domain:** `anik.local` · **Environment:** DC + File Server + Workstation
+> **Platform:** UTM (Apple Silicon) · **Domain:** lab-local AD DS forest · **Environment:** DC + File Server + Workstation
 
 This section covers the end-to-end deployment of a Windows Server 2022 enterprise domain inside **UTM on Apple Silicon** — a platform that eliminates PXE booting, bridged adapters, and Hyper-V. Every workaround, every decision, and every verification step is documented with screenshots.
 
-The domain includes two servers, a domain-joined Windows 11 workstation, multi-site DHCP scopes, Group Policy enforced to the workstation level, layered file permissions, and full DNS integration.
+The domain includes two servers, a domain-joined Windows 11 workstation, multi-site DHCP scopes, Group Policy validation, layered file permissions, and DNS integration for the lab namespace.
 
 ### What Was Built
 
 **Active Directory Domain Services**
-Deployed a new forest and promoted the primary server to Domain Controller. Configured DNS integration during promotion. Verified replication health and domain functionality post-promotion.
+Deployed a new forest and promoted the primary server to Domain Controller. Configured DNS integration during promotion and validated the domain controller role post-promotion.
 
 **DHCP — Multi-Site Scopes**
-Configured four DHCP scopes across two simulated sites:
+Configured five DHCP scopes: one primary lab subnet plus four simulated site scopes across two locations:
 - `Toronto Office` — primary user subnet
 - `Toronto Lab` — isolated lab segment
 - `Montreal Office` — remote site simulation
@@ -95,7 +105,7 @@ Created address reservations, verified lease assignment per scope, and confirmed
 Built a logical OU hierarchy reflecting a real two-site organization:
 
 ```
-anik.local
+lab.local
 ├── Toronto
 ├── Montreal
 ├── Servers
@@ -105,7 +115,7 @@ anik.local
 ```
 
 **Users & Security Groups**
-Created domain users (`toronto.user`, `montreal.user`) and security groups (`Toronto-Users`, `Montreal-Users`). Assigned users to appropriate groups and verified group membership.
+Created lab domain users and location-based security groups. Assigned users to appropriate groups and verified group membership.
 
 **Group Policy**
 Created and linked `TOR-UserLockdown-GPO` to the Toronto OU. Configured:
@@ -125,7 +135,7 @@ Mapped Drive Z to the share from the workstation and tested access restriction e
 Configured DNS forwarders for external resolution. Verified internal name resolution using DNS Manager and `nslookup`. Confirmed workstation DNS registration.
 
 **Workstation Integration — End-to-End Verification**
-Joined `GB-WS-02-ANIK` (Windows 11) to `anik.local`. Verified:
+Joined a Windows 11 workstation to the lab domain. Verified:
 - DHCP lease assigned from correct scope
 - GPO applied and active (`gpresult`)
 - Drive Z mapped and share accessible
@@ -136,10 +146,10 @@ Joined `GB-WS-02-ANIK` (Windows 11) to `anik.local`. Verified:
 | Component | Detail |
 |---|---|
 | Virtualization | UTM on Apple Silicon (M-series MacBook Air) |
-| Primary Server | `CLCT4003-1DC` — Domain Controller, DNS, DHCP |
-| Member Server | `CLCT4003-SRV02` — member server for domain lab services |
-| Workstation | `GB-WS-02-ANIK` — Windows 11, domain-joined |
-| Domain | `anik.local` |
+| Primary Server | `LAB-DC01` — Domain Controller, DNS, DHCP |
+| Member Server | `LAB-SRV02` — member server for domain lab services |
+| Workstation | `LAB-WS01` — Windows 11, domain-joined |
+| Domain | Lab-local AD DS forest |
 | Network | NAT-only (UTM limitation on Apple Silicon) |
 | Host Hardware | MacBook Air (Apple Silicon) |
 
