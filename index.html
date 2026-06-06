@@ -1248,10 +1248,10 @@ footer p {
     </div>
     <div class="task-body">
       <p class="task-story">
-        A single-server domain is a lab — an enterprise network needs member servers. I deployed a second Windows Server 2022 VM, <strong>CLCT4003-SRV02-MdRahatIslamAnik</strong>, destined to serve as the <strong>File Server and GPO Management</strong> node. The process mirrored SRV01's installation: create the UTM VM, install Windows Server 2022 Datacenter, set a local administrator password, rename the machine, and then complete the domain join to <code>anik.local</code>.
+        A single-server domain is a lab — an enterprise network needs member servers. I deployed a second Windows Server 2022 VM, <strong>CLCT4003-SRV02-MdRahatIslamAnik</strong>, as a member server for domain lab services. The process mirrored SRV01's installation: create the UTM VM, install Windows Server 2022 Datacenter, set a local administrator password, rename the machine, and then complete the domain join to <code>anik.local</code>.
       </p>
       <p class="task-story">
-        Joining the domain required pointing SRV02's DNS to the domain controller at <code>192.168.1.10</code>, entering domain credentials, and confirming the "Welcome to the anik.local domain" message. A static IP (<code>192.168.1.12</code>) and DHCP reservation were then configured, and MAC address <code>7A-1C-33-A3-08-8B</code> was logged for the reservation record.
+        Joining the domain required pointing SRV02's DNS to the domain controller, entering domain credentials, and confirming the "Welcome to the anik.local domain" message. A static IP and DHCP reservation were then configured, with the VM's MAC address logged for the reservation record.
       </p>
       <div class="screenshots cols-3">
         <figure class="screenshot">
@@ -1299,20 +1299,20 @@ footer p {
       <figcaption>Logging into SRV02 using domain credentials anik\Administrator</figcaption>
     </figure>
         <figure class="screenshot">
-      <img src="assets/screenshots/screenshot-105.jpg" alt="Static IP and DNS configured on SRV02 — pointing to DC at 192.168.1.10" loading="lazy">
-      <figcaption>Static IP and DNS configured on SRV02 — pointing to DC at 192.168.1.10</figcaption>
+      <img src="assets/screenshots/screenshot-105.jpg" alt="Static IP and DNS configured on SRV02 — pointing to the domain controller" loading="lazy">
+      <figcaption>Static IP and DNS configured on SRV02 — pointing to the domain controller</figcaption>
     </figure>
         <figure class="screenshot">
-      <img src="assets/screenshots/screenshot-106.jpg" alt="SRV02 network adapter — static IP 192.168.1.12, DNS to DC confirmed" loading="lazy">
-      <figcaption>SRV02 network adapter — static IP 192.168.1.12, DNS to DC confirmed</figcaption>
+      <img src="assets/screenshots/screenshot-106.jpg" alt="SRV02 network adapter — static IP and DNS settings confirmed" loading="lazy">
+      <figcaption>SRV02 network adapter — static IP and DNS settings confirmed</figcaption>
     </figure>
         <figure class="screenshot">
       <img src="assets/screenshots/screenshot-107.jpg" alt="Re-applying static IPv4 on SRV02 post-domain join" loading="lazy">
       <figcaption>Re-applying static IPv4 on SRV02 post-domain join</figcaption>
     </figure>
         <figure class="screenshot">
-      <img src="assets/screenshots/screenshot-108.jpg" alt="ipconfig confirms static IP 192.168.1.12 and gateway on SRV02" loading="lazy">
-      <figcaption>ipconfig confirms static IP 192.168.1.12 and gateway on SRV02</figcaption>
+      <img src="assets/screenshots/screenshot-108.jpg" alt="ipconfig confirms static IP and gateway on SRV02" loading="lazy">
+      <figcaption>ipconfig confirms static IP and gateway on SRV02</figcaption>
     </figure>
         <figure class="screenshot">
       <img src="assets/screenshots/screenshot-109.jpg" alt="DHCP reservation for SRV02 created in DHCP Manager" loading="lazy">
@@ -1489,15 +1489,15 @@ footer p {
     </div>
     <div class="task-body">
       <p class="task-story">
-        File sharing in a domain environment brings together everything built so far: users, groups, permissions, and the servers. I created a <strong>CompanyShare</strong> folder on the domain controller under <code>C:\</code>, shared it over the network, and set up the permission matrix: <strong>Toronto-Users</strong> received Read access at the share level and Modify at the NTFS level; <strong>Montreal-Users</strong> received Change access at share and Modify at NTFS. Administrators retained Full Control.
+        File sharing in a domain environment brings together everything built so far: users, groups, permissions, and the servers. I created a <strong>CompanyShare</strong> folder in the domain lab, shared it over the network, and configured layered share and NTFS permissions for the Toronto and Montreal security groups. Administrators retained Full Control.
       </p>
       <p class="task-story">
-        From the workstation, I mapped <strong>Drive Z:</strong> using the <code>montreal.user</code> account — and then tested that Montreal could read files but not create or modify them, verifying the permissions were applied exactly as designed.
+        From the workstation, I mapped <strong>Drive Z:</strong> using a domain user account and tested file access behavior to confirm the restrictions were applied.
       </p>
       <div class="screenshots cols-3">
         <figure class="screenshot">
-      <img src="assets/screenshots/screenshot-140.jpg" alt="CompanyShare folder created under C:\ on domain controller" loading="lazy">
-      <figcaption>CompanyShare folder created under C:\ on domain controller</figcaption>
+      <img src="assets/screenshots/screenshot-140.jpg" alt="CompanyShare folder created under C:\ in the domain lab" loading="lazy">
+      <figcaption>CompanyShare folder created under C:\ in the domain lab</figcaption>
     </figure>
         <figure class="screenshot">
       <img src="assets/screenshots/screenshot-141.jpg" alt="Share permissions — Toronto-Users granted Read access" loading="lazy">
@@ -1520,8 +1520,8 @@ footer p {
       <figcaption>Drive Z mapped on workstation using montreal.user credentials</figcaption>
     </figure>
         <figure class="screenshot">
-      <img src="assets/screenshots/screenshot-146.jpg" alt="Read-only access enforced — Montreal user cannot create files" loading="lazy">
-      <figcaption>Read-only access enforced — Montreal user cannot create files</figcaption>
+      <img src="assets/screenshots/screenshot-146.jpg" alt="Access restriction test — file creation attempt blocked" loading="lazy">
+      <figcaption>Access restriction test — file creation attempt blocked</figcaption>
     </figure>
       </div>
     </div>
@@ -1570,7 +1570,7 @@ footer p {
     </div>
     <div class="task-body">
       <p class="task-story">
-        The final proof of a working domain is the workstation. I configured the Windows 11 VM (<code>GB-WS-01-ANIK</code>) with DNS pointing to <code>192.168.10.10</code> (the domain controller), verified a successful <code>ping</code> to the DC, and ran <code>nslookup</code> to confirm name resolution. The domain join prompt required domain admin credentials — and returned the "<strong>Welcome to the anik.local domain</strong>" confirmation.
+        The final proof of a working domain is the workstation. I configured the Windows 11 VM (<code>GB-WS-02-ANIK</code>) with DNS pointing to the domain controller, verified a successful <code>ping</code> to the DC, and ran <code>nslookup</code> to confirm name resolution. The domain join prompt required domain admin credentials — and returned the "<strong>Welcome to the anik.local domain</strong>" confirmation.
       </p>
       <p class="task-story">
         Post-join, the workstation received its DHCP-assigned IP, applied both computer and user GPOs (confirmed via <code>gpresult /r</code>), and successfully connected to the CompanyShare folder. Every service built throughout this case study — DHCP, DNS, AD DS, GPO, file sharing — was verified to be working end-to-end from a domain-joined client.

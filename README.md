@@ -115,7 +115,7 @@ Created and linked `TOR-UserLockdown-GPO` to the Toronto OU. Configured:
 Verified policy application via `gpupdate /force` and `gpresult /r` on the workstation.
 
 **File Services — CompanyShare**
-Deployed `CompanyShare` on the member file server (`CLCT4003-SRV02`). Applied layered permissions:
+Deployed `CompanyShare` in the domain lab and applied layered permissions:
 - Share-level: security group access
 - NTFS-level: granular per-group permissions
 
@@ -125,7 +125,7 @@ Mapped Drive Z to the share from the workstation and tested access restriction e
 Configured DNS forwarders for external resolution. Verified internal name resolution using DNS Manager and `nslookup`. Confirmed workstation DNS registration.
 
 **Workstation Integration — End-to-End Verification**
-Joined `GB-WS-01-ANIK` (Windows 11) to `anik.local`. Verified:
+Joined `GB-WS-02-ANIK` (Windows 11) to `anik.local`. Verified:
 - DHCP lease assigned from correct scope
 - GPO applied and active (`gpresult`)
 - Drive Z mapped and share accessible
@@ -137,8 +137,8 @@ Joined `GB-WS-01-ANIK` (Windows 11) to `anik.local`. Verified:
 |---|---|
 | Virtualization | UTM on Apple Silicon (M-series MacBook Air) |
 | Primary Server | `CLCT4003-1DC` — Domain Controller, DNS, DHCP |
-| Member Server | `CLCT4003-SRV02` — File Server |
-| Workstation | `GB-WS-01-ANIK` — Windows 11, domain-joined |
+| Member Server | `CLCT4003-SRV02` — member server for domain lab services |
+| Workstation | `GB-WS-02-ANIK` — Windows 11, domain-joined |
 | Domain | `anik.local` |
 | Network | NAT-only (UTM limitation on Apple Silicon) |
 | Host Hardware | MacBook Air (Apple Silicon) |
