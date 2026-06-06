@@ -568,21 +568,21 @@ footer p {
   <div class="hero-label">Self-Directed Case Study · George Brown College · Fall 2025</div>
   <h1>From the <span class="accent">Endpoint</span><br>to the <span class="accent">Domain</span></h1>
   <p class="hero-desc">
-    Two courses. Two environments. One complete enterprise Windows stack — built from scratch, documented step by step, and verified with live screenshots. This case study covers Windows 11 workstation configuration from the client side, and Windows Server 2022 domain deployment from the server side — together they tell the full story of how a real-world enterprise network comes to life.
+    Two courses. Two environments. One lab-simulated enterprise Windows environment — built from scratch, documented step by step, and verified with screenshots. This case study covers Windows 11 workstation configuration from the client side, and Windows Server 2022 domain deployment from the server side.
   </p>
   <div class="hero-meta">
     <span class="meta-chip highlight">George Brown College</span>
     <span class="meta-chip">Cloud Computing & Network Admin (T465)</span>
-    <span class="meta-chip">Md Rahat Islam Anik · 101635860</span>
+    <span class="meta-chip">Md Rahat Islam Anik</span>
     <span class="meta-chip">Fall 2025</span>
   </div>
 </section>
 
 <div class="stats-bar">
   <div class="stat"><span class="stat-num">2</span><span class="stat-label">Environments Built</span></div>
-  <div class="stat"><span class="stat-num">107+</span><span class="stat-label">Screenshots Taken</span></div>
-  <div class="stat"><span class="stat-num">20</span><span class="stat-label">Tasks & Phases</span></div>
-  <div class="stat"><span class="stat-num">3</span><span class="stat-label">Servers Deployed</span></div>
+  <div class="stat"><span class="stat-num">158</span><span class="stat-label">Screenshots Taken</span></div>
+  <div class="stat"><span class="stat-num">19</span><span class="stat-label">Tasks & Phases</span></div>
+  <div class="stat"><span class="stat-num">2+1</span><span class="stat-label">Servers + Workstation</span></div>
 </div>
 
 <!-- ──────────────── PART 1 ──────────────── -->
@@ -616,7 +616,7 @@ footer p {
         Every enterprise build starts the same way — a blank virtual machine. For this task, I deployed a fresh Windows 11 installation inside <strong>VMware Fusion</strong> on my MacBook, naming the machine following the lab convention: <code>YourName-StudentID</code>. This was my first hands-on contact with desktop virtualization for the course, and it set the foundation for everything that followed.
       </p>
       <p class="task-story">
-        Getting Windows 11 to install on Fusion required downloading the ISO, creating the VM with sufficient specs, and navigating through the Setup wizard. The machine name <strong>MdRahatIslamAnik-101635860</strong> was set during initial configuration — a detail that mattered for identification across every subsequent screenshot.
+        Getting Windows 11 to install on Fusion required downloading the ISO, creating the VM with sufficient specs, and navigating through the Setup wizard. The machine name followed the required student lab convention during initial configuration — a detail that mattered for identification across every subsequent screenshot.
       </p>
       <div class="screenshots cols-2">
         <figure class="screenshot">
@@ -651,7 +651,7 @@ footer p {
     </div>
     <div class="task-body">
       <p class="task-story">
-        In enterprise environments, IT teams rarely configure each PC manually — they use <strong>provisioning packages</strong> to automate setup. This task required creating a .ppkg file using <strong>Windows Configuration Designer (WCD)</strong> that would automatically create a local administrator account called <code>AnAdmin</code> with the password <code>P@ssw0rd</code> and apply it to the VM.
+        In enterprise environments, IT teams rarely configure each PC manually — they use <strong>provisioning packages</strong> to automate setup. This task required creating a .ppkg file using <strong>Windows Configuration Designer (WCD)</strong> that would automatically create a local administrator account called <code>AnAdmin</code> with a lab-only password and apply it to the VM.
       </p>
       <p class="task-story">
         I built the package step by step in WCD: selecting the account settings, defining credentials, exporting the .ppkg file, and then applying it to the Windows 11 VM. After application, the account appeared under local users — confirming the package deployed correctly.
@@ -1623,7 +1623,7 @@ footer p {
     <h2>What This Built in Me</h2>
     <p>These two case studies weren't just coursework — they were a complete walkthrough of the enterprise Windows stack from both ends. On the client side, I learned how IT teams provision, harden, and manage endpoints at scale. On the server side, I built the infrastructure those endpoints connect to.</p>
     <p>Working within hardware constraints — Apple Silicon, UTM's NAT networking — forced me to understand <em>why</em> configurations are done the way they are, not just <em>how</em> to click through wizards. Every limitation I documented taught me something a lab manual couldn't.</p>
-    <p>The skills demonstrated here aren't academic — they're the foundation of real systems administration work: AD DS, DHCP, GPO, NTFS permissions, PowerShell, Storage Spaces, provisioning packages. This is what enterprise Windows looks like before the cloud takes over — and understanding it makes every cloud migration conversation richer.</p>
+    <p>The skills demonstrated here are foundational systems administration work: AD DS, DHCP, GPO, NTFS permissions, PowerShell, Storage Spaces, provisioning packages, and verification discipline.</p>
 
     <div class="skills-grid">
       <div class="skill-item">
@@ -1655,7 +1655,7 @@ footer p {
 </div>
 
 <footer>
-  <p>MD RAHAT ISLAM ANIK · STUDENT ID 101635860 · GEORGE BROWN COLLEGE · CLOUD COMPUTING & NETWORK ADMINISTRATION T465 · FALL 2025</p>
+  <p>MD RAHAT ISLAM ANIK · GEORGE BROWN COLLEGE · CLOUD COMPUTING & NETWORK ADMINISTRATION T465 · FALL 2025</p>
   <p>GITHUB: RAHATISLAMANIK-SPEC · LINKEDIN: RAHATISLAMANIK</p>
 </footer>
 

@@ -1,5 +1,5 @@
 # Enterprise Windows Administration
-### From the Endpoint to the Domain — A Full-Stack Case Study
+### From the Endpoint to the Domain — A Lab Case Study
 
 **Md Rahat Islam Anik · George Brown College · Cloud Computing & Network Administration (T465) · Fall 2025**
 
@@ -9,8 +9,16 @@
 
 ---
 
-| 2 Environments Built | 107+ Screenshots Taken | 20 Tasks & Phases | 3 Servers Deployed |
+| 2 Environments Built | 158 Screenshots | 19 Tasks & Phases | 2 Servers + 1 Workstation |
 |:---:|:---:|:---:|:---:|
+
+---
+
+## Portfolio Summary
+
+This repository documents a lab-simulated enterprise Windows environment built on macOS with Apple Silicon. It demonstrates practical administration work across endpoint provisioning, local policy, PowerShell-based network configuration, Storage Spaces, Active Directory Domain Services, DHCP, DNS, Group Policy, file sharing, and domain-joined workstation validation.
+
+The live case study is intentionally evidence-heavy: each task is paired with screenshots so a reviewer can see what was configured and how it was verified.
 
 ---
 
@@ -20,20 +28,22 @@ No rack. No lab. No x86 hardware.
 
 This project was built entirely on a **MacBook Air (Apple Silicon)** — which meant no PXE booting, no bridged network adapters, and no Hyper-V. Everything that typically "just works" in a proper lab had to be thought through differently. Two separate virtualization platforms were used across two courses: **VMware Fusion** for the Windows 11 client environment, and **UTM** for the full Windows Server 2022 domain.
 
-What came out the other side: a fully documented, end-to-end enterprise Windows stack — from the endpoint to the domain — with 107+ screenshots capturing every configuration step along the way.
+What came out the other side: a documented, end-to-end enterprise Windows lab — from the endpoint to the domain — with 158 screenshots capturing configuration and verification steps along the way.
+
+> **Public portfolio note:** This was a simulated college lab environment, not a production network. Public documentation avoids real passwords, tokens, and production credentials.
 
 ---
 
 ## Part 1 — Windows 11 Enterprise Workstation Administration
 
-> **Platform:** VMware Fusion · **OS:** Windows 11 · **Machine Name:** `MdRahatIslamAnik-101635860`
+> **Platform:** VMware Fusion · **OS:** Windows 11 · **Machine Name:** student lab naming convention
 
 This section covers the deployment, configuration, and hardening of a Windows 11 enterprise workstation from scratch inside **VMware Fusion on macOS**. Every task mirrors real-world enterprise IT operations — provisioning, security policy enforcement, local storage management, and file sharing.
 
 ### What Was Built
 
 **Task 01 — Provisioning & Naming**
-Deployed a fresh Windows 11 VM inside VMware Fusion. Machine named to lab standard (`YourName-StudentID`) during initial setup — a detail enforced across all subsequent screenshots and configurations.
+Deployed a fresh Windows 11 VM inside VMware Fusion. Machine named to the required student lab convention during initial setup — a detail enforced across subsequent screenshots and configurations.
 
 **Task 02 — Local Security Policy**
 Configured local Group Policy settings: account lockout thresholds, password complexity requirements, and audit policies. Verified enforcement via `secpol.msc` and event log review.
@@ -53,7 +63,7 @@ Configured shared folders with explicit share permissions and layered NTFS permi
 |---|---|
 | Virtualization | VMware Fusion (macOS host) |
 | Operating System | Windows 11 Enterprise |
-| Machine Name | `MdRahatIslamAnik-101635860` |
+| Machine Name | Student lab naming convention |
 | Host Hardware | MacBook Air (Apple Silicon) |
 | Network | NAT (Fusion-managed) |
 
@@ -61,7 +71,7 @@ Configured shared folders with explicit share permissions and layered NTFS permi
 
 ## Part 2 — Windows Server 2022 Enterprise Domain: `anik.local`
 
-> **Platform:** UTM (Apple Silicon) · **Domain:** `anik.local` · **Servers:** DC + File Server + Workstation
+> **Platform:** UTM (Apple Silicon) · **Domain:** `anik.local` · **Environment:** DC + File Server + Workstation
 
 This section covers the end-to-end deployment of a Windows Server 2022 enterprise domain inside **UTM on Apple Silicon** — a platform that eliminates PXE booting, bridged adapters, and Hyper-V. Every workaround, every decision, and every verification step is documented with screenshots.
 
@@ -141,9 +151,20 @@ Joined `GB-WS-01-ANIK` (Windows 11) to `anik.local`. Verified:
 
 ---
 
+## Repository Structure
+
+| Path | Purpose |
+|---|---|
+| `README.md` | Portfolio overview and recruiter-readable project summary |
+| `index.html` | Static GitHub Pages case study |
+| `assets/screenshots/` | Extracted screenshot evidence used by the case study |
+| `docs/evidence-map.md` | Task-by-task map of evidence and skills demonstrated |
+
+---
+
 ## Live Case Study
 
-The full interactive case study — with 107+ screenshots documenting every task — is published at:
+The full interactive case study — with 158 screenshots documenting the lab work — is published at:
 
 **[rahatislamanik-spec.github.io/Windows-Server-2022-Enterprise-Domain](https://rahatislamanik-spec.github.io/Windows-Server-2022-Enterprise-Domain/)**
 
