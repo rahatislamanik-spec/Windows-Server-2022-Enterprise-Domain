@@ -30,6 +30,17 @@ The live case study is intentionally evidence-heavy: each task is paired with sc
 | Troubleshooting and constraints | NAT-only virtualization notes, DNS forwarder limitation, Apple Silicon lab constraints |
 | Documentation discipline | 158 screenshots, task-by-task evidence map, recruiter-readable case study page |
 
+## Lab Scope and Limitations
+
+| Area | Status | Notes |
+|---|---|---|
+| Windows 11 endpoint build | Implemented and screenshot-verified | Built in VMware Fusion on macOS |
+| Windows Server AD DS forest | Implemented and screenshot-verified | Single-domain lab forest with one domain controller |
+| DHCP/DNS/GPO/file sharing | Configured and validated in lab | Internal validation only; not a production network |
+| Multi-site design | Simulated | Multiple DHCP scopes model site segmentation, but no physical routers/sites were deployed |
+| External DNS forwarding | Configured, partially constrained | UTM NAT behavior limited external lookup validation from the server VM |
+| Production readiness | Not claimed | No HA domain controller pair, backup/restore plan, monitoring, patch baseline, or physical endpoint rollout |
+
 ---
 
 ## The Setup
@@ -118,11 +129,11 @@ lab.local
 Created lab domain users and location-based security groups. Assigned users to appropriate groups and verified group membership.
 
 **Group Policy**
-Created and linked `TOR-UserLockdown-GPO` to the Toronto OU. Configured:
+Created and linked a lab lockdown GPO to validate workstation/user policy behavior. Configured:
 - Domain-wide account policy (complexity, length, expiry)
 - Account lockout policy (threshold, duration, observation window)
 
-Verified policy application via `gpupdate /force` and `gpresult /r` on the workstation.
+Verified policy application via `gpupdate /force` and `gpresult /r` on the workstation. In production, user-side restrictions would be linked to the correct user OU or implemented with loopback processing where computer-scoped targeting is required.
 
 **File Services — CompanyShare**
 Deployed `CompanyShare` in the domain lab and applied layered permissions:

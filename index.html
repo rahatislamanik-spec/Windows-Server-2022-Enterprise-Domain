@@ -1198,7 +1198,7 @@ footer p {
         With the domain running, the next critical service was <strong>DHCP</strong> — the mechanism by which clients receive an IP address, gateway, and DNS server automatically. I installed the DHCP Server role on the domain controller after assigning a static IPv4 address so DHCP and DNS services were anchored to a fixed address.
       </p>
       <p class="task-story">
-        I created multiple scopes to simulate a <strong>multi-site enterprise network</strong> with offices in Toronto and Montreal. Each scope was configured with the correct subnet, IP range, exclusions, and scope options (Router 003, DNS Server 006, DNS Domain Name 015). A DHCP reservation for SRV02 ensured it would always receive the same IP regardless of lease renewal.
+        I created one primary lab scope plus four simulated site scopes to model a <strong>multi-site enterprise network</strong> with offices in Toronto and Montreal. Each scope was configured with subnet ranges, exclusions, and scope options (Router 003, DNS Server 006, DNS Domain Name 015). A DHCP reservation for the member server ensured it would receive a consistent lab address.
       </p>
       <div class="highlight-box">
         <p><strong>Scopes created:</strong> one primary lab subnet plus four simulated site scopes for Toronto and Montreal lab/office segments.</p>
@@ -1416,13 +1416,13 @@ footer p {
     </div>
     <div class="task-body">
       <p class="task-story">
-        Group Policy is the central nervous system of Windows domain management. I configured two GPOs: a <strong>user lockdown policy</strong> targeting the Toronto OU that restricted Start menu personalization, and a <strong>domain-wide account policy</strong> enforcing complexity, minimum length, history, and account lockout.
+        Group Policy is the central nervous system of Windows domain management. I configured lab policy settings to validate workstation/user policy behavior, including a UI restriction policy and a <strong>domain-wide account policy</strong> enforcing complexity, minimum length, history, and account lockout.
       </p>
       <p class="task-story">
-        I opened the <strong>Group Policy Management Console (GPMC)</strong>, created <code>TOR-UserLockdown-GPO</code> and linked it to the Toronto → Computers OU. Inside the policy editor, I navigated to Administrative Templates → Personalization and enabled the restriction on changing the Start menu background. For the account policy, I modified the Default Domain Policy: minimum length of 7, complexity enabled, maximum age of 42 days, and account lockout after 5 failed attempts with a 15-minute duration.
+        I opened the <strong>Group Policy Management Console (GPMC)</strong>, created a lab lockdown GPO, and validated policy application from the workstation. Inside the policy editor, I navigated through Administrative Templates and enabled a UI restriction. For the account policy, I modified the Default Domain Policy: minimum length, complexity, maximum password age, and account lockout after repeated failed attempts.
       </p>
       <p class="task-story">
-        After applying changes with <code>gpupdate /force</code> on the domain controller, I ran <code>gpresult /r</code> on the workstation to confirm both GPOs were received and applied. I then deliberately triggered the account lockout with repeated failed sign-in attempts — proving the lockout policy was enforced in real time.
+        After applying changes with <code>gpupdate /force</code>, I ran <code>gpresult /r</code> on the workstation to confirm policy receipt. I then deliberately triggered the account lockout with repeated failed sign-in attempts, validating the lockout behavior in the lab. In production, user-side restrictions would be linked to the proper user OU or implemented with loopback processing where computer-targeted scope is required.
       </p>
       <div class="screenshots cols-3">
         <figure class="screenshot">
@@ -1535,11 +1535,11 @@ footer p {
     </div>
     <div class="task-body">
       <p class="task-story">
-        DNS is the backbone of an Active Directory domain — without it, nothing resolves. I opened <strong>DNS Manager</strong> on the domain controller, reviewed the server's network interface bindings, and configured an <strong>external DNS forwarder</strong> (Google DNS <code>external DNS forwarder</code>) to handle queries outside the <code>lab.local</code> namespace.
+        DNS is the backbone of an Active Directory domain — without it, nothing resolves. I opened <strong>DNS Manager</strong> on the domain controller, reviewed the server's network interface bindings, and configured an <strong>external DNS forwarder</strong> to handle queries outside the lab namespace.
       </p>
       <div class="tech-note">
         <span class="tech-note-icon">ℹ</span>
-        <p>External forwarder validation failed in nslookup — this was expected and correct. UTM on Apple Silicon uses NAT-only networking, meaning the domain controller cannot reach external DNS servers directly (traffic is routed through the macOS host). This is a platform limitation, not a DNS misconfiguration. The forwarder settings are correctly configured for the lab environment.</p>
+        <p>External forwarder validation was limited in this lab because UTM on Apple Silicon used NAT-only networking. Internal AD DNS behavior remained the main validation target, while external lookup behavior was documented as a platform constraint rather than treated as production-ready DNS validation.</p>
       </div>
       <div class="screenshots cols-3">
         <figure class="screenshot">
