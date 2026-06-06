@@ -30,7 +30,7 @@ This project was built entirely on a **MacBook Air (Apple Silicon)** — which m
 
 What came out the other side: a documented, end-to-end enterprise Windows lab — from the endpoint to the domain — with 158 screenshots capturing configuration and verification steps along the way.
 
-> **Public portfolio note:** This was a simulated college lab environment, not a production network. Public documentation avoids real passwords, tokens, and production credentials.
+> **Public portfolio note:** This was a simulated college lab environment, not a production network. Public documentation is limited to lab-safe configuration evidence.
 
 ---
 
@@ -46,7 +46,7 @@ This section covers the deployment, configuration, and hardening of a Windows 11
 Deployed a fresh Windows 11 VM inside VMware Fusion. Machine named to the required student lab convention during initial setup — a detail enforced across subsequent screenshots and configurations.
 
 **Task 02 — Local Security Policy**
-Configured local Group Policy settings: account lockout thresholds, password complexity requirements, and audit policies. Verified enforcement via `secpol.msc` and event log review.
+Configured local Group Policy settings: account lockout thresholds, account security requirements, and audit policies. Verified enforcement via `secpol.msc` and event log review.
 
 **Task 03 — PowerShell Network Management**
 Used PowerShell to configure network adapter settings, test connectivity, and manage IP configuration — no GUI dependency.
@@ -109,7 +109,7 @@ Created domain users (`toronto.user`, `montreal.user`) and security groups (`Tor
 
 **Group Policy**
 Created and linked `TOR-UserLockdown-GPO` to the Toronto OU. Configured:
-- Domain-wide password policy (complexity, length, expiry)
+- Domain-wide account policy (complexity, length, expiry)
 - Account lockout policy (threshold, duration, observation window)
 
 Verified policy application via `gpupdate /force` and `gpresult /r` on the workstation.
@@ -129,7 +129,7 @@ Joined `GB-WS-02-ANIK` (Windows 11) to `anik.local`. Verified:
 - DHCP lease assigned from correct scope
 - GPO applied and active (`gpresult`)
 - Drive Z mapped and share accessible
-- User logon functioning under domain credentials
+- User logon functioning under domain authentication
 
 ### Environment
 

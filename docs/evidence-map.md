@@ -19,7 +19,7 @@ This map connects each portfolio task or phase to the screenshot evidence used i
 | Windows Server domain | Phase 03 - DHCP multi-site scopes | `086-093` | DHCP role install, scope activation, multi-scope visibility |
 | Windows Server domain | Phase 04 - SRV02 domain join | `094-109` | Member server install, rename, domain join, static network settings |
 | Windows Server domain | Phase 05 - OUs, users, and security groups | `110-126` | OU hierarchy, user creation, group membership |
-| Windows Server domain | Phase 06 - Group Policy | `127-139` | GPO creation, password and lockout policy, gpupdate/gpresult verification |
+| Windows Server domain | Phase 06 - Group Policy | `127-139` | GPO creation, account and lockout policy, gpupdate/gpresult verification |
 | Windows Server domain | Phase 07 - CompanyShare permissions | `140-146` | Share setup, group permissions, mapped drive, access testing |
 | Windows Server domain | Phase 08 - DNS configuration | `147-150` | DNS Manager, forwarder configuration, lookup-zone review |
 | Windows Server domain | Phase 09 - Workstation integration | `151-158` | DNS/client network setup, domain join, DHCP/GPO end-to-end verification |

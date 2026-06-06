@@ -651,10 +651,10 @@ footer p {
     </div>
     <div class="task-body">
       <p class="task-story">
-        In enterprise environments, IT teams rarely configure each PC manually — they use <strong>provisioning packages</strong> to automate setup. This task required creating a .ppkg file using <strong>Windows Configuration Designer (WCD)</strong> that would automatically create a local administrator account called <code>AnAdmin</code> with a lab-only password and apply it to the VM.
+        In enterprise environments, IT teams rarely configure each PC manually — they use <strong>provisioning packages</strong> to automate setup. This task required creating a .ppkg file using <strong>Windows Configuration Designer (WCD)</strong> that would automatically create a local administrator account called <code>AnAdmin</code> with lab-only sign-in details and apply it to the VM.
       </p>
       <p class="task-story">
-        I built the package step by step in WCD: selecting the account settings, defining credentials, exporting the .ppkg file, and then applying it to the Windows 11 VM. After application, the account appeared under local users — confirming the package deployed correctly.
+        I built the package step by step in WCD: selecting the account settings, defining local sign-in details, exporting the .ppkg file, and then applying it to the Windows 11 VM. After application, the account appeared under local users — confirming the package deployed correctly.
       </p>
       <div class="screenshots cols-3">
         <figure class="screenshot">
@@ -705,10 +705,10 @@ footer p {
     </div>
     <div class="task-body">
       <p class="task-story">
-        Security hardening is non-negotiable in any enterprise environment. This task required configuring <strong>Local Security Policy</strong> to enforce UAC (User Account Control) behavior — specifically, ensuring that any privileged action triggers a secure credential prompt and <strong>dims the desktop</strong> (Secure Desktop mode). This prevents malware from spoofing the UAC dialog.
+        Security hardening is non-negotiable in any enterprise environment. This task required configuring <strong>Local Security Policy</strong> to enforce UAC (User Account Control) behavior — specifically, ensuring that any privileged action triggers a secure authentication prompt and <strong>dims the desktop</strong> (Secure Desktop mode). This prevents malware from spoofing the UAC dialog.
       </p>
       <p class="task-story">
-        I accessed <code>secpol.msc</code>, navigated to <strong>Local Policies → Security Options</strong>, and located the UAC settings. I configured "User Account Control: Behavior of the elevation prompt for administrators in Admin Approval Mode" to prompt for credentials on the secure desktop. Screenshots captured the before/after state of each policy setting.
+        I accessed <code>secpol.msc</code>, navigated to <strong>Local Policies → Security Options</strong>, and located the UAC settings. I configured the elevation prompt for administrators in Admin Approval Mode to require authentication on the secure desktop. Screenshots captured the before/after state of each policy setting.
       </p>
       <div class="tech-note">
         <span class="tech-note-icon">⚠</span>
@@ -724,8 +724,8 @@ footer p {
       <figcaption>Security Options list — UAC policies visible</figcaption>
     </figure>
         <figure class="screenshot">
-      <img src="assets/screenshots/screenshot-017.jpg" alt="UAC — Behavior of elevation prompt set to prompt for credentials" loading="lazy">
-      <figcaption>UAC — Behavior of elevation prompt set to prompt for credentials</figcaption>
+      <img src="assets/screenshots/screenshot-017.jpg" alt="UAC — elevation prompt configured for secure authentication" loading="lazy">
+      <figcaption>UAC — elevation prompt configured for secure authentication</figcaption>
     </figure>
         <figure class="screenshot">
       <img src="assets/screenshots/screenshot-018.jpg" alt="Secure Desktop dimming policy — enabled" loading="lazy">
@@ -754,8 +754,8 @@ footer p {
       <figcaption>Screen dims on UAC trigger — secure desktop active</figcaption>
     </figure>
         <figure class="screenshot">
-      <img src="assets/screenshots/screenshot-024.jpg" alt="UAC dialog with credential prompt visible" loading="lazy">
-      <figcaption>UAC dialog with credential prompt visible</figcaption>
+      <img src="assets/screenshots/screenshot-024.jpg" alt="UAC authentication dialog visible" loading="lazy">
+      <figcaption>UAC authentication dialog visible</figcaption>
     </figure>
         <figure class="screenshot">
       <img src="assets/screenshots/screenshot-025.jpg" alt="Final policy state confirmed in secpol.msc" loading="lazy">
@@ -1098,8 +1098,8 @@ footer p {
       <figcaption>Windows Server 2022 installation progress — files copying</figcaption>
     </figure>
         <figure class="screenshot">
-      <img src="assets/screenshots/screenshot-069.jpg" alt="Setting built-in Administrator password during first-time setup" loading="lazy">
-      <figcaption>Setting built-in Administrator password during first-time setup</figcaption>
+      <img src="assets/screenshots/screenshot-069.jpg" alt="Completing built-in Administrator setup during first-time setup" loading="lazy">
+      <figcaption>Completing built-in Administrator setup during first-time setup</figcaption>
     </figure>
         <figure class="screenshot">
       <img src="assets/screenshots/screenshot-070.jpg" alt="Windows Server 2022 boots to lock screen — Ctrl+Alt+Delete prompt" loading="lazy">
@@ -1124,7 +1124,7 @@ footer p {
         This was the moment the server transformed from a standalone box into the <strong>authority of an enterprise domain</strong>. I installed the <strong>AD DS role</strong> through Server Manager's Add Roles and Features Wizard, selected CLCT4003-1DC-MdRahatIslamAnik as the target, and began the promotion process. Choosing <strong>"Add a new forest"</strong> created the root domain: <code>anik.local</code>.
       </p>
       <p class="task-story">
-        The promotion wizard walked through DNS integration, Global Catalog designation, DSRM password creation, and confirmed the NetBIOS name <strong>ANIK</strong>. The wizard auto-generated a PowerShell deployment script — proof the configuration could be repeated and automated. After the final prerequisites check passed (with the expected DNS delegation warning in an isolated lab), the server rebooted and came back online as <strong>ANIK\Administrator</strong> — the domain controller of <code>anik.local</code> was live.
+        The promotion wizard walked through DNS integration, Global Catalog designation, recovery-mode setup, and confirmed the NetBIOS name <strong>ANIK</strong>. The wizard auto-generated a PowerShell deployment script — proof the configuration could be repeated and automated. After the final prerequisites check passed (with the expected DNS delegation warning in an isolated lab), the server rebooted and came back online as the domain controller of <code>anik.local</code>.
       </p>
       <div class="screenshots cols-3">
         <figure class="screenshot">
@@ -1160,8 +1160,8 @@ footer p {
       <figcaption>AD DS Configuration Wizard — Add New Forest selected, anik.local entered</figcaption>
     </figure>
         <figure class="screenshot">
-      <img src="assets/screenshots/screenshot-080.jpg" alt="Domain Controller Options — DNS and Global Catalog enabled, DSRM password set" loading="lazy">
-      <figcaption>Domain Controller Options — DNS and Global Catalog enabled, DSRM password set</figcaption>
+      <img src="assets/screenshots/screenshot-080.jpg" alt="Domain Controller Options — DNS and Global Catalog enabled" loading="lazy">
+      <figcaption>Domain Controller Options — DNS and Global Catalog enabled</figcaption>
     </figure>
         <figure class="screenshot">
       <img src="assets/screenshots/screenshot-081.jpg" alt="DNS Options — no delegation required in standalone lab environment" loading="lazy">
@@ -1180,8 +1180,8 @@ footer p {
       <figcaption>AD DS Prerequisites Check — all checks passed</figcaption>
     </figure>
         <figure class="screenshot">
-      <img src="assets/screenshots/screenshot-085.jpg" alt="First logon as ANIK\Administrator — domain controller promotion confirmed" loading="lazy">
-      <figcaption>First logon as ANIK\Administrator — domain controller promotion confirmed</figcaption>
+      <img src="assets/screenshots/screenshot-085.jpg" alt="First domain-controller logon — promotion confirmed" loading="lazy">
+      <figcaption>First domain-controller logon — promotion confirmed</figcaption>
     </figure>
       </div>
     </div>
@@ -1248,10 +1248,10 @@ footer p {
     </div>
     <div class="task-body">
       <p class="task-story">
-        A single-server domain is a lab — an enterprise network needs member servers. I deployed a second Windows Server 2022 VM, <strong>CLCT4003-SRV02-MdRahatIslamAnik</strong>, as a member server for domain lab services. The process mirrored SRV01's installation: create the UTM VM, install Windows Server 2022 Datacenter, set a local administrator password, rename the machine, and then complete the domain join to <code>anik.local</code>.
+        A single-server domain is a lab — an enterprise network needs member servers. I deployed a second Windows Server 2022 VM, <strong>CLCT4003-SRV02-MdRahatIslamAnik</strong>, as a member server for domain lab services. The process mirrored SRV01's installation: create the UTM VM, install Windows Server 2022 Datacenter, complete first-time setup, rename the machine, and then complete the domain join to <code>anik.local</code>.
       </p>
       <p class="task-story">
-        Joining the domain required pointing SRV02's DNS to the domain controller, entering domain credentials, and confirming the "Welcome to the anik.local domain" message. A static IP and DHCP reservation were then configured, with the VM's MAC address logged for the reservation record.
+        Joining the domain required pointing SRV02's DNS to the domain controller, completing domain authentication, and confirming the "Welcome to the anik.local domain" message. A static IP and DHCP reservation were then configured, with the VM's MAC address logged for the reservation record.
       </p>
       <div class="screenshots cols-3">
         <figure class="screenshot">
@@ -1295,8 +1295,8 @@ footer p {
       <figcaption>SRV02 successfully joined to anik.local domain</figcaption>
     </figure>
         <figure class="screenshot">
-      <img src="assets/screenshots/screenshot-104.jpg" alt="Logging into SRV02 using domain credentials anik\Administrator" loading="lazy">
-      <figcaption>Logging into SRV02 using domain credentials anik\Administrator</figcaption>
+      <img src="assets/screenshots/screenshot-104.jpg" alt="Logging into SRV02 with domain authentication" loading="lazy">
+      <figcaption>Logging into SRV02 with domain authentication</figcaption>
     </figure>
         <figure class="screenshot">
       <img src="assets/screenshots/screenshot-105.jpg" alt="Static IP and DNS configured on SRV02 — pointing to the domain controller" loading="lazy">
@@ -1333,7 +1333,7 @@ footer p {
         Active Directory's power comes from organization. I opened <strong>Active Directory Users and Computers (ADUC)</strong> on the domain controller and built a full OU hierarchy under <code>anik.local</code>: <strong>Toronto</strong>, <strong>Montreal</strong>, <strong>Servers</strong>, <strong>Workstations</strong>, <strong>Groups</strong>, and <strong>Users</strong> — mirroring how a real enterprise organizes its directory structure by geography and function.
       </p>
       <p class="task-story">
-        Inside each location OU, I created user accounts with proper UPN suffixes (<code>toronto.user@anik.local</code>, <code>montreal.user@anik.local</code>), enforced password-change-at-next-logon policies, and built <strong>Global Security Groups</strong> — <strong>Toronto-Users</strong> and <strong>Montreal-Users</strong> — adding each user to their respective group. This group structure would directly drive NTFS permissions and GPO filtering later.
+        Inside each location OU, I created user accounts with proper UPN suffixes (<code>toronto.user@anik.local</code>, <code>montreal.user@anik.local</code>), enforced first-logon account-change policies, and built <strong>Global Security Groups</strong> — <strong>Toronto-Users</strong> and <strong>Montreal-Users</strong> — adding each user to their respective group. This group structure would directly drive NTFS permissions and GPO filtering later.
       </p>
       <div class="screenshots cols-3">
         <figure class="screenshot">
@@ -1361,8 +1361,8 @@ footer p {
       <figcaption>New user creation — montreal.user@anik.local in Montreal OU</figcaption>
     </figure>
         <figure class="screenshot">
-      <img src="assets/screenshots/screenshot-116.jpg" alt="Password policies for Montreal user — change at next logon enabled" loading="lazy">
-      <figcaption>Password policies for Montreal user — change at next logon enabled</figcaption>
+      <img src="assets/screenshots/screenshot-116.jpg" alt="Account policy for Montreal user — change at next logon enabled" loading="lazy">
+      <figcaption>Account policy for Montreal user — change at next logon enabled</figcaption>
     </figure>
         <figure class="screenshot">
       <img src="assets/screenshots/screenshot-117.jpg" alt="Montreal user account successfully created" loading="lazy">
@@ -1412,17 +1412,17 @@ footer p {
   <div class="task-block" id="phase6">
     <div class="task-header">
       <span class="task-num">PHASE 06</span>
-      <span class="task-title">Group Policy Objects — Lockdown Policy &amp; Domain Password Policy</span>
+      <span class="task-title">Group Policy Objects — Lockdown Policy &amp; Domain Account Policy</span>
     </div>
     <div class="task-body">
       <p class="task-story">
-        Group Policy is the central nervous system of Windows domain management. I configured two GPOs: a <strong>user lockdown policy</strong> targeting the Toronto OU that restricted Start menu personalization, and a <strong>domain-wide password policy</strong> enforcing complexity, minimum length, history, and account lockout.
+        Group Policy is the central nervous system of Windows domain management. I configured two GPOs: a <strong>user lockdown policy</strong> targeting the Toronto OU that restricted Start menu personalization, and a <strong>domain-wide account policy</strong> enforcing complexity, minimum length, history, and account lockout.
       </p>
       <p class="task-story">
-        I opened the <strong>Group Policy Management Console (GPMC)</strong>, created <code>TOR-UserLockdown-GPO</code> and linked it to the Toronto → Computers OU. Inside the policy editor, I navigated to Administrative Templates → Personalization and enabled the restriction on changing the Start menu background. For the password policy, I modified the Default Domain Policy: minimum length of 7, complexity enabled, maximum age of 42 days, and account lockout after 5 failed attempts with a 15-minute duration.
+        I opened the <strong>Group Policy Management Console (GPMC)</strong>, created <code>TOR-UserLockdown-GPO</code> and linked it to the Toronto → Computers OU. Inside the policy editor, I navigated to Administrative Templates → Personalization and enabled the restriction on changing the Start menu background. For the account policy, I modified the Default Domain Policy: minimum length of 7, complexity enabled, maximum age of 42 days, and account lockout after 5 failed attempts with a 15-minute duration.
       </p>
       <p class="task-story">
-        After applying changes with <code>gpupdate /force</code> on the domain controller, I ran <code>gpresult /r</code> on the workstation to confirm both GPOs were received and applied. I then deliberately triggered the account lockout by entering wrong credentials repeatedly — proving the lockout policy was enforced in real time.
+        After applying changes with <code>gpupdate /force</code> on the domain controller, I ran <code>gpresult /r</code> on the workstation to confirm both GPOs were received and applied. I then deliberately triggered the account lockout with repeated failed sign-in attempts — proving the lockout policy was enforced in real time.
       </p>
       <div class="screenshots cols-3">
         <figure class="screenshot">
@@ -1434,8 +1434,8 @@ footer p {
       <figcaption>Default Domain Policy — GPO tree structure viewed</figcaption>
     </figure>
         <figure class="screenshot">
-      <img src="assets/screenshots/screenshot-129.jpg" alt="Password Policy settings — history, minimum length, complexity visible" loading="lazy">
-      <figcaption>Password Policy settings — history, minimum length, complexity visible</figcaption>
+      <img src="assets/screenshots/screenshot-129.jpg" alt="Account policy settings — history, minimum length, complexity visible" loading="lazy">
+      <figcaption>Account policy settings — history, minimum length, complexity visible</figcaption>
     </figure>
         <figure class="screenshot">
       <img src="assets/screenshots/screenshot-130.jpg" alt="TOR-UserLockdown-GPO linked to Toronto → Computers OU" loading="lazy">
@@ -1454,8 +1454,8 @@ footer p {
       <figcaption>Prevent changing Start Menu background — Enabled</figcaption>
     </figure>
         <figure class="screenshot">
-      <img src="assets/screenshots/screenshot-134.jpg" alt="Password policy applied — min length 7, complexity on, max age 42 days" loading="lazy">
-      <figcaption>Password policy applied — min length 7, complexity on, max age 42 days</figcaption>
+      <img src="assets/screenshots/screenshot-134.jpg" alt="Account policy applied — min length 7, complexity on, max age 42 days" loading="lazy">
+      <figcaption>Account policy applied — min length 7, complexity on, max age 42 days</figcaption>
     </figure>
         <figure class="screenshot">
       <img src="assets/screenshots/screenshot-135.jpg" alt="Account Lockout Policy — 5 failed attempts, 15 min lockout" loading="lazy">
@@ -1516,8 +1516,8 @@ footer p {
       <figcaption>NTFS permissions — Montreal-Users granted Modify + Read</figcaption>
     </figure>
         <figure class="screenshot">
-      <img src="assets/screenshots/screenshot-145.jpg" alt="Drive Z mapped on workstation using montreal.user credentials" loading="lazy">
-      <figcaption>Drive Z mapped on workstation using montreal.user credentials</figcaption>
+      <img src="assets/screenshots/screenshot-145.jpg" alt="Drive Z mapped on workstation using a domain user" loading="lazy">
+      <figcaption>Drive Z mapped on workstation using a domain user</figcaption>
     </figure>
         <figure class="screenshot">
       <img src="assets/screenshots/screenshot-146.jpg" alt="Access restriction test — file creation attempt blocked" loading="lazy">
@@ -1570,7 +1570,7 @@ footer p {
     </div>
     <div class="task-body">
       <p class="task-story">
-        The final proof of a working domain is the workstation. I configured the Windows 11 VM (<code>GB-WS-02-ANIK</code>) with DNS pointing to the domain controller, verified a successful <code>ping</code> to the DC, and ran <code>nslookup</code> to confirm name resolution. The domain join prompt required domain admin credentials — and returned the "<strong>Welcome to the anik.local domain</strong>" confirmation.
+        The final proof of a working domain is the workstation. I configured the Windows 11 VM (<code>GB-WS-02-ANIK</code>) with DNS pointing to the domain controller, verified a successful <code>ping</code> to the DC, and ran <code>nslookup</code> to confirm name resolution. The domain join prompt required domain authentication — and returned the "<strong>Welcome to the anik.local domain</strong>" confirmation.
       </p>
       <p class="task-story">
         Post-join, the workstation received its DHCP-assigned IP, applied both computer and user GPOs (confirmed via <code>gpresult /r</code>), and successfully connected to the CompanyShare folder. Every service built throughout this case study — DHCP, DNS, AD DS, GPO, file sharing — was verified to be working end-to-end from a domain-joined client.
@@ -1589,8 +1589,8 @@ footer p {
       <figcaption>Ping to domain controller 192.168.10.10 — successful, network confirmed</figcaption>
     </figure>
         <figure class="screenshot">
-      <img src="assets/screenshots/screenshot-154.jpg" alt="Domain join prompt — entering anik.local credentials" loading="lazy">
-      <figcaption>Domain join prompt — entering anik.local credentials</figcaption>
+      <img src="assets/screenshots/screenshot-154.jpg" alt="Domain join prompt — completing anik.local authentication" loading="lazy">
+      <figcaption>Domain join prompt — completing anik.local authentication</figcaption>
     </figure>
         <figure class="screenshot">
       <img src="assets/screenshots/screenshot-155.jpg" alt="Welcome to the anik.local domain — domain join confirmed" loading="lazy">
@@ -1636,7 +1636,7 @@ footer p {
       </div>
       <div class="skill-item">
         <h4>Group Policy</h4>
-        <p>GPO creation, linking, Administrative Templates, password policy, lockout simulation</p>
+        <p>GPO creation, linking, Administrative Templates, account policy, lockout simulation</p>
       </div>
       <div class="skill-item">
         <h4>Storage & File Services</h4>
