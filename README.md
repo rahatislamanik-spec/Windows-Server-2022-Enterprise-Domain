@@ -160,6 +160,8 @@ Joined `GB-WS-02-ANIK` (Windows 11) to `anik.local`. Verified:
 | `assets/screenshots/` | Extracted screenshot evidence used by the case study |
 | `docs/evidence-map.md` | Task-by-task map of evidence and skills demonstrated |
 
+For a quick evidence review, start with [`docs/evidence-map.md`](docs/evidence-map.md).
+
 ---
 
 ## Live Case Study
