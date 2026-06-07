@@ -190,7 +190,7 @@ For a quick evidence review, start with [`docs/evidence-map.md`](docs/evidence-m
 
 For a 60-second technical overview, start with this lab topology diagram. It summarizes the AD DS, DNS, DHCP, GPO, file services, and workstation validation model.
 
-[View interactive HTML version](assets/diagrams/domain-network-topology.html)
+[View interactive HTML version](https://rahatislamanik-spec.github.io/Windows-Server-2022-Enterprise-Domain/assets/diagrams/domain-network-topology.html)
 
 ---
 
