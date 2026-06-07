@@ -205,7 +205,7 @@ The full interactive case study — with 158 screenshots documenting the lab wor
 ## Author
 
 **Md Rahat Islam Anik**
-Cloud Computing & Network Administration · George Brown College · May 2026
+Cloud & Infrastructure Operations Specialist · Toronto, Canada
 
 [![LinkedIn](https://img.shields.io/badge/LinkedIn-Connect-0A66C2?style=flat&logo=linkedin)](https://linkedin.com/in/rahatislamanik)
 [![GitHub](https://img.shields.io/badge/GitHub-Portfolio-181717?style=flat&logo=github)](https://github.com/rahatislamanik-spec)
