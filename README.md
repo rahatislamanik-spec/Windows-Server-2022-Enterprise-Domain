@@ -184,7 +184,13 @@ Joined a Windows 11 workstation to the lab domain. Verified:
 
 For a quick evidence review, start with [`docs/evidence-map.md`](docs/evidence-map.md).
 
-For a 60-second technical overview, start with the [domain network topology diagram](assets/diagrams/domain-network-topology.html).
+## Domain Topology
+
+![Windows Server Domain Topology](assets/diagrams/domain-network-topology.svg)
+
+For a 60-second technical overview, start with this lab topology diagram. It summarizes the AD DS, DNS, DHCP, GPO, file services, and workstation validation model.
+
+[View interactive HTML version](assets/diagrams/domain-network-topology.html)
 
 ---
 
