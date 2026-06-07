@@ -178,10 +178,13 @@ Joined a Windows 11 workstation to the lab domain. Verified:
 |---|---|
 | `README.md` | Portfolio overview and recruiter-readable project summary |
 | `index.html` | Static GitHub Pages case study |
+| `assets/diagrams/domain-network-topology.html` | Lab topology diagram showing the AD DS, DNS, DHCP, GPO, file services, and workstation validation model |
 | `assets/screenshots/` | Extracted screenshot evidence used by the case study |
 | `docs/evidence-map.md` | Task-by-task map of evidence and skills demonstrated |
 
 For a quick evidence review, start with [`docs/evidence-map.md`](docs/evidence-map.md).
+
+For a 60-second technical overview, start with the [domain network topology diagram](assets/diagrams/domain-network-topology.html).
 
 ---
 
