@@ -1,7 +1,8 @@
 # Enterprise Windows Administration
-### From the Endpoint to the Domain — A Lab Case Study
 
-**Md Rahat Islam Anik · Windows Endpoint & Server Administration Lab**
+### Windows Server 2022 · Active Directory · DHCP · DNS · Group Policy · File Services · Windows 11
+
+**Md Rahat Islam Anik · Cloud Computing & Network Administration · Toronto, Canada**
 
 [![Live Case Study](https://img.shields.io/badge/Live%20Case%20Study-View%20Now-0078D4?style=for-the-badge&logo=windows&logoColor=white)](https://rahatislamanik-spec.github.io/Windows-Server-2022-Enterprise-Domain/)
 [![LinkedIn](https://img.shields.io/badge/LinkedIn-rahatislamanik-0A66C2?style=for-the-badge&logo=linkedin&logoColor=white)](https://linkedin.com/in/rahatislamanik)
@@ -14,32 +15,43 @@
 
 ---
 
-## Portfolio Summary
+## Overview
 
-This repository documents a lab-simulated enterprise Windows environment built on macOS with Apple Silicon. It demonstrates practical administration work across endpoint provisioning, local policy, PowerShell-based network configuration, Storage Spaces, Active Directory Domain Services, DHCP, DNS, Group Policy, file sharing, and domain-joined workstation validation.
+This project documents a lab-built enterprise Windows environment — covering both endpoint administration and a full Active Directory domain, built from scratch on a MacBook Air with no physical server hardware.
 
-The live case study is intentionally evidence-heavy: each task is paired with screenshots so a reviewer can see what was configured and how it was verified.
+The two parts reflect the kind of work that shows up in junior sysadmin and IT administrator roles: provisioning and hardening a Windows 11 workstation, then deploying the server infrastructure it connects to — AD DS, DNS, DHCP, Group Policy, file services, and domain authentication.
 
-## What This Demonstrates for Reviewers
+Everything is screenshot-evidenced. The [live case study](https://rahatislamanik-spec.github.io/Windows-Server-2022-Enterprise-Domain/) walks through all 158 screenshots task by task.
 
-| Skill area | Evidence in this repo |
+If you want to see the DC promotion process in detail — the full configuration wizard step by step — that's documented separately in the companion repo:
+
+> **Related project: [Windows-Server-Infrastructure-Active-Directory](https://github.com/rahatislamanik-spec/Windows-Server-Infrastructure-Active-Directory)** — focused deployment documentation covering the full AD DS installation and domain controller promotion workflow with 19 sequential screenshots.
+
+---
+
+## What This Demonstrates
+
+| Skill Area | Evidence |
 |---|---|
-| Windows endpoint administration | Windows 11 provisioning, local security policy, UAC behavior, Storage Spaces, File History, local sharing |
-| Windows Server administration | Server role installation, AD DS promotion workflow, DHCP, DNS, file services, domain-joined workstation checks |
-| Identity and access operations | OUs, lab users, security groups, share/NTFS permissions, domain authentication validation |
-| Troubleshooting and constraints | NAT-only virtualization notes, DNS forwarder limitation, Apple Silicon lab constraints |
+| Windows endpoint administration | Windows 11 provisioning, local security policy, PowerShell network config, Storage Spaces, file sharing |
+| Windows Server administration | Server role installation, AD DS promotion, DHCP, DNS, file services, domain-joined workstation validation |
+| Identity and access operations | OU design, domain users, security groups, share and NTFS permissions, domain authentication |
+| Group Policy | GPO creation, domain and OU linking, enforcement verified via `gpupdate /force` and `gpresult /r` |
+| Troubleshooting approach | NAT-only virtualization constraints documented, DNS forwarder limitations noted, workarounds explained |
 | Documentation discipline | 158 screenshots, task-by-task evidence map, recruiter-readable case study page |
 
-## Lab Scope and Limitations
+---
+
+## Lab Scope
 
 | Area | Status | Notes |
 |---|---|---|
-| Windows 11 endpoint build | Implemented and screenshot-verified | Built in VMware Fusion on macOS |
-| Windows Server AD DS forest | Implemented and screenshot-verified | Single-domain lab forest with one domain controller |
-| DHCP/DNS/GPO/file sharing | Configured and validated in lab | Internal validation only; not a production network |
-| Multi-site design | Simulated | Multiple DHCP scopes model site segmentation, but no physical routers/sites were deployed |
-| External DNS forwarding | Configured, partially constrained | UTM NAT behavior limited external lookup validation from the server VM |
-| Production readiness | Not claimed | No HA domain controller pair, backup/restore plan, monitoring, patch baseline, or physical endpoint rollout |
+| Windows 11 endpoint build | Implemented and screenshot-verified | VMware Fusion on macOS |
+| Windows Server AD DS forest | Implemented and screenshot-verified | Single-domain lab forest, one DC |
+| DHCP / DNS / GPO / file sharing | Configured and validated | Internal lab — not a production network |
+| Multi-site DHCP design | Simulated | Multiple scopes model site segmentation; no physical routers deployed |
+| External DNS forwarding | Configured, partially constrained | UTM NAT behavior limited external lookup validation from the server |
+| Production readiness | Not claimed | No HA DC pair, no backup plan, no monitoring or patch baseline |
 
 ---
 
@@ -47,73 +59,67 @@ The live case study is intentionally evidence-heavy: each task is paired with sc
 
 No rack. No lab. No x86 hardware.
 
-This project was built entirely on a **MacBook Air (Apple Silicon)** — which meant no PXE booting, no bridged network adapters, and no Hyper-V. Everything that typically "just works" in a traditional lab had to be thought through differently. Two virtualization platforms were used: **VMware Fusion** for the Windows 11 client environment, and **UTM** for the Windows Server 2022 domain environment.
+This was built entirely on a **MacBook Air (Apple Silicon)** — which ruled out PXE booting, bridged network adapters, and Hyper-V. Two virtualization platforms handled different parts: **VMware Fusion** for the Windows 11 client environment, and **UTM** for the Windows Server 2022 domain.
 
-What came out the other side: a documented, end-to-end enterprise Windows lab — from the endpoint to the domain — with 158 screenshots capturing configuration and verification steps along the way.
+Working within those constraints was part of the exercise. Most of the decisions that had to be made — NAT-only networking, DNS forwarder configuration, scope design without a physical router — are decisions that come up in real environments too, just with different constraints.
 
-> **Public portfolio note:** This was a simulated lab environment, not a production network. Public documentation is limited to lab-safe configuration evidence, and screenshots have been redacted where identifiers were visible.
+> This was a simulated lab environment, not a production network. Screenshots have been reviewed and redacted where identifiers were visible.
 
 ---
 
 ## Part 1 — Windows 11 Enterprise Workstation Administration
 
-> **Platform:** VMware Fusion · **OS:** Windows 11 · **Machine Name:** lab-safe workstation naming convention
-
-This section covers the deployment, configuration, and baseline hardening of a Windows 11 enterprise workstation from scratch inside **VMware Fusion on macOS**. The tasks map to common enterprise IT operations: provisioning, local security policy, network configuration, storage management, and file sharing.
+> **Platform:** VMware Fusion · **OS:** Windows 11 Enterprise
 
 ### What Was Built
 
 **Task 01 — Provisioning & Naming**
-Deployed a fresh Windows 11 VM inside VMware Fusion. The machine was named to a consistent lab convention during initial setup so later configuration and evidence could be tracked clearly.
+Deployed a fresh Windows 11 VM in VMware Fusion. Named to a consistent lab convention so configuration and evidence could be tracked cleanly across tasks.
 
 **Task 02 — Local Security Policy**
-Configured local Group Policy settings: account lockout thresholds, account security requirements, and audit policies. Verified enforcement via `secpol.msc` and event log review.
+Configured local Group Policy settings through `secpol.msc`: account lockout thresholds, password requirements, and audit policies. Verified enforcement through event log review.
 
 **Task 03 — PowerShell Network Management**
-Used PowerShell to configure network adapter settings, test connectivity, and manage IP configuration — no GUI dependency.
+Used PowerShell to configure network adapter settings, test connectivity, and manage IP configuration without touching the GUI — cleaner and scriptable.
 
 **Task 04 — Storage Spaces**
-Created a Storage Space pool using multiple virtual disks. Configured a simple volume and verified resilience settings — simulating enterprise storage consolidation on a workstation.
+Created a Storage Space pool using multiple virtual disks, configured a simple volume, and verified resilience settings — simulating enterprise storage consolidation on a workstation.
 
 **Task 05 — File Sharing & NTFS Permissions**
-Configured shared folders with explicit share permissions and layered NTFS permissions. Tested access under different user contexts to validate restriction enforcement.
+Configured shared folders with explicit share permissions and layered NTFS permissions. Tested access under different user contexts to confirm restrictions were enforced correctly, not just set.
 
 ### Environment
 
 | Component | Detail |
 |---|---|
 | Virtualization | VMware Fusion (macOS host) |
-| Operating System | Windows 11 Enterprise |
-| Machine Name | Lab workstation naming convention |
-| Host Hardware | MacBook Air (Apple Silicon) |
+| OS | Windows 11 Enterprise |
+| Host | MacBook Air (Apple Silicon) |
 | Network | NAT (Fusion-managed) |
 
 ---
 
 ## Part 2 — Windows Server 2022 Enterprise Domain
 
-> **Platform:** UTM (Apple Silicon) · **Domain:** lab-local AD DS forest · **Environment:** DC + File Server + Workstation
-
-This section covers the end-to-end deployment of a Windows Server 2022 enterprise domain inside **UTM on Apple Silicon** — a platform that eliminates PXE booting, bridged adapters, and Hyper-V. Every workaround, every decision, and every verification step is documented with screenshots.
-
-The domain includes two servers, a domain-joined Windows 11 workstation, multi-site DHCP scopes, Group Policy validation, layered file permissions, and DNS integration for the lab namespace.
+> **Platform:** UTM (Apple Silicon) · **Domain:** lab.local · **Environment:** DC + Member Server + Workstation
 
 ### What Was Built
 
 **Active Directory Domain Services**
-Deployed a new forest and promoted the primary server to Domain Controller. Configured DNS integration during promotion and validated the domain controller role post-promotion.
+Deployed a new forest and promoted the primary server to Domain Controller. DNS was integrated at promotion. The DC was validated post-promotion before adding any member servers or workstations.
 
 **DHCP — Multi-Site Scopes**
-Configured five DHCP scopes: one primary lab subnet plus four simulated site scopes across two locations:
+Configured five DHCP scopes modeling a two-site organization:
+
 - `Toronto Office` — primary user subnet
 - `Toronto Lab` — isolated lab segment
 - `Montreal Office` — remote site simulation
 - `Montreal Lab` — remote lab segment
 
-Created address reservations, verified lease assignment per scope, and confirmed DHCP lease visibility from the workstation.
+Address reservations created, lease assignment verified per scope, and DHCP lease confirmed visible from the workstation.
 
 **Organizational Unit Structure**
-Built a logical OU hierarchy reflecting a real two-site organization:
+Built a logical OU hierarchy reflecting a real two-site organization — designed so Group Policy can be targeted at the right level without bleed between sites or user types.
 
 ```
 lab.local
@@ -126,49 +132,52 @@ lab.local
 ```
 
 **Users & Security Groups**
-Created lab domain users and location-based security groups. Assigned users to appropriate groups and verified group membership.
+Created domain users and location-based security groups. Users assigned to appropriate groups and membership verified — not just created and left unchecked.
 
 **Group Policy**
-Created and linked a lab lockdown GPO to validate workstation/user policy behavior. Configured:
-- Domain-wide account policy (complexity, length, expiry)
-- Account lockout policy (threshold, duration, observation window)
+Created and linked GPOs at domain and OU level:
 
-Verified policy application via `gpupdate /force` and `gpresult /r` on the workstation. In production, user-side restrictions would be linked to the correct user OU or implemented with loopback processing where computer-scoped targeting is required.
+- Domain-wide password policy: complexity, length, expiry
+- Account lockout policy: threshold, observation window, lockout duration
+
+Verified with `gpupdate /force` and `gpresult /r` on the workstation. Policy application confirmed active, not just configured.
 
 **File Services — CompanyShare**
-Deployed `CompanyShare` in the domain lab and applied layered permissions:
+Deployed a shared folder (`CompanyShare`) with layered permissions:
+
 - Share-level: security group access
 - NTFS-level: granular per-group permissions
 
-Mapped Drive Z to the share from the workstation and tested access restriction enforcement across user accounts.
+Drive Z mapped from the workstation. Access restriction enforcement tested across different user accounts to confirm the permission model held.
 
 **DNS**
-Configured DNS forwarders for external resolution. Verified internal name resolution using DNS Manager and `nslookup`. Confirmed workstation DNS registration.
+Configured DNS forwarders for external resolution. Internal name resolution verified via DNS Manager and `nslookup`. Workstation DNS registration confirmed.
 
-**Workstation Integration — End-to-End Verification**
-Joined a Windows 11 workstation to the lab domain. Verified:
-- DHCP lease assigned from correct scope
-- GPO applied and active (`gpresult`)
-- Drive Z mapped and share accessible
-- User logon functioning under domain authentication
+**Workstation Integration — End-to-End**
+Joined a Windows 11 workstation to the domain and verified the full stack:
+
+- DHCP lease assigned from the correct scope
+- GPO applied and active on the workstation
+- Drive Z mapped and share accessible under domain credentials
+- Domain user logon functioning correctly
 
 ### Environment
 
 | Component | Detail |
 |---|---|
-| Virtualization | UTM on Apple Silicon (M-series MacBook Air) |
-| Primary Server | `LAB-DC01` — Domain Controller, DNS, DHCP |
-| Member Server | `LAB-SRV02` — member server for domain lab services |
-| Workstation | `LAB-WS01` — Windows 11, domain-joined |
-| Domain | Lab-local AD DS forest |
+| Virtualization | UTM on Apple Silicon |
+| Primary Server | LAB-DC01 — Domain Controller, DNS, DHCP |
+| Member Server | LAB-SRV02 — domain member server |
+| Workstation | LAB-WS01 — Windows 11, domain-joined |
+| Domain | lab.local |
 | Network | NAT-only (UTM limitation on Apple Silicon) |
-| Host Hardware | MacBook Air (Apple Silicon) |
+| Host | MacBook Air (Apple Silicon) |
 
 ---
 
 ## Skills Demonstrated
 
-`Active Directory Domain Services` · `DHCP` · `DNS` · `Group Policy (GPO)` · `NTFS Permissions` · `Share Permissions` · `Organizational Units` · `Domain Controller Promotion` · `PowerShell` · `Storage Spaces` · `VMware Fusion` · `UTM` · `Windows Server 2022` · `Windows 11 Enterprise` · `File Services` · `Security Groups` · `Apple Silicon Virtualization`
+`Active Directory Domain Services` · `Domain Controller Promotion` · `DHCP` · `DNS` · `Group Policy` · `NTFS Permissions` · `Share Permissions` · `Organizational Units` · `Security Groups` · `PowerShell` · `Storage Spaces` · `File Services` · `Windows Server 2022` · `Windows 11 Enterprise` · `VMware Fusion` · `UTM` · `Apple Silicon Virtualization`
 
 ---
 
@@ -176,19 +185,19 @@ Joined a Windows 11 workstation to the lab domain. Verified:
 
 | Path | Purpose |
 |---|---|
-| `README.md` | Portfolio overview and recruiter-readable project summary |
-| `index.html` | Static GitHub Pages case study |
-| `assets/diagrams/domain-network-topology.html` | Lab topology diagram showing the AD DS, DNS, DHCP, GPO, file services, and workstation validation model |
-| `assets/screenshots/` | Extracted screenshot evidence used by the case study |
-| `docs/evidence-map.md` | Task-by-task map of evidence and skills demonstrated |
+| `README.md` | Project overview and evidence summary |
+| `index.html` | GitHub Pages live case study |
+| `assets/diagrams/` | Lab topology diagram (SVG + interactive HTML) |
+| `assets/screenshots/` | Screenshot evidence used by the case study |
+| `docs/evidence-map.md` | Task-by-task evidence and skills map |
 
-For a quick evidence review, start with [`docs/evidence-map.md`](docs/evidence-map.md).
+For a quick review of what's covered, start with [`docs/evidence-map.md`](docs/evidence-map.md).
+
+---
 
 ## Domain Topology
 
 ![Windows Server Domain Topology](assets/diagrams/domain-network-topology.svg)
-
-For a 60-second technical overview, start with this lab topology diagram. It summarizes the AD DS, DNS, DHCP, GPO, file services, and workstation validation model.
 
 [View interactive HTML version](https://rahatislamanik-spec.github.io/Windows-Server-2022-Enterprise-Domain/assets/diagrams/domain-network-topology.html)
 
@@ -196,16 +205,25 @@ For a 60-second technical overview, start with this lab topology diagram. It sum
 
 ## Live Case Study
 
-The full interactive case study — with 158 screenshots documenting the lab work — is published at:
+The full case study with 158 screenshots is at:
 
 **[rahatislamanik-spec.github.io/Windows-Server-2022-Enterprise-Domain](https://rahatislamanik-spec.github.io/Windows-Server-2022-Enterprise-Domain/)**
+
+---
+
+## Related Project
+
+This repository covers the full running environment. For the step-by-step DC promotion process — the complete AD DS configuration wizard with 19 sequential screenshots — see:
+
+**[Windows-Server-Infrastructure-Active-Directory](https://github.com/rahatislamanik-spec/Windows-Server-Infrastructure-Active-Directory)**
+OS install through domain controller promotion · DNS integration · directory design · GPO design
 
 ---
 
 ## Author
 
 **Md Rahat Islam Anik**
-Cloud & Infrastructure Operations Specialist · Toronto, Canada
+Cloud & Infrastructure Operations · Toronto, Canada
 
 [![LinkedIn](https://img.shields.io/badge/LinkedIn-Connect-0A66C2?style=flat&logo=linkedin)](https://linkedin.com/in/rahatislamanik)
 [![GitHub](https://img.shields.io/badge/GitHub-Portfolio-181717?style=flat&logo=github)](https://github.com/rahatislamanik-spec)
