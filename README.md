@@ -1,4 +1,5 @@
 # Enterprise Windows Administration
+> **Status:** Portfolio Complete — v1.0
 
 ### Windows Server 2022 · Active Directory · DHCP · DNS · Group Policy · File Services · Windows 11
 
