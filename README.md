@@ -21,7 +21,9 @@ This project documents a lab-built enterprise Windows environment — covering b
 
 The two parts reflect the kind of work that shows up in junior sysadmin and IT administrator roles: provisioning and hardening a Windows 11 workstation, then deploying the server infrastructure it connects to — AD DS, DNS, DHCP, Group Policy, file services, and domain authentication.
 
-Everything is screenshot-evidenced. The [live case study](https://rahatislamanik-spec.github.io/Windows-Server-2022-Enterprise-Domain/) walks through all 158 screenshots task by task.
+The live case study is intentionally evidence-heavy: core implementation and validation tasks are paired with screenshots so a reviewer can see what was configured and how it was verified.
+
+The [live case study](https://rahatislamanik-spec.github.io/Windows-Server-2022-Enterprise-Domain/) walks through all 158 retained screenshots task by task.
 
 If you want to see the DC promotion process in detail — the full configuration wizard step by step — that's documented separately in the companion repo:
 
@@ -51,13 +53,20 @@ If you want to see the DC promotion process in detail — the full configuration
 | DHCP / DNS / GPO / file sharing | Configured and validated | Internal lab — not a production network |
 | Multi-site DHCP design | Simulated | Multiple scopes model site segmentation; no physical routers deployed |
 | External DNS forwarding | Configured, partially constrained | UTM NAT behavior limited external lookup validation from the server |
+| AD DNS namespace | Lab-only design | `lab.local` is retained in historical lab evidence; production designs should use a registered DNS subdomain such as `ad.example.com` rather than `.local` |
 | Production readiness | Not claimed | No HA DC pair, no backup plan, no monitoring or patch baseline |
+
+---
+
+## Related Windows Lab Context
+
+The companion [Windows Server Infrastructure & Active Directory](https://github.com/rahatislamanik-spec/Windows-Server-Infrastructure-Active-Directory) repository documents a separate deployment exercise using the `anik.local` lab namespace. It is not the same forest as the broader `lab.local` operations environment documented here. The projects are cross-referenced because they demonstrate complementary deployment and administration workflows, not one continuous production environment.
 
 ---
 
 ## The Setup
 
-No rack. No lab. No x86 hardware.
+No physical rack or dedicated server lab. No native x86 server hardware.
 
 This was built entirely on a **MacBook Air (Apple Silicon)** — which ruled out PXE booting, bridged network adapters, and Hyper-V. Two virtualization platforms handled different parts: **VMware Fusion** for the Windows 11 client environment, and **UTM** for the Windows Server 2022 domain.
 
