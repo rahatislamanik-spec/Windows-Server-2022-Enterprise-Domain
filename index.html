@@ -1,0 +1,1669 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Enterprise Windows Administration Lab</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Mono:ital,wght@0,300;0,400;0,500;1,400&family=Syne:wght@400;500;600;700;800&family=IBM+Plex+Sans:ital,wght@0,300;0,400;0,500;0,600;1,400&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg: #080c12;
+  --surface: #0d1320;
+  --surface2: #121a2b;
+  --border: #1e2d45;
+  --blue: #0f7bdb;
+  --blue-dim: #0a5fad;
+  --cyan: #38c2e0;
+  --accent: #f5a623;
+  --text: #d0dcea;
+  --text-muted: #6b829e;
+  --text-dim: #3d5168;
+  --green: #30c67c;
+  --red: #e05555;
+  --white: #f0f4fa;
+}
+
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+html { scroll-behavior: smooth; }
+
+body {
+  background: var(--bg);
+  color: var(--text);
+  font-family: 'IBM Plex Sans', sans-serif;
+  font-size: 15px;
+  line-height: 1.7;
+  min-height: 100vh;
+  overflow-x: hidden;
+}
+
+/* GRID BG */
+body::before {
+  content: '';
+  position: fixed;
+  inset: 0;
+  background-image:
+    linear-gradient(var(--border) 1px, transparent 1px),
+    linear-gradient(90deg, var(--border) 1px, transparent 1px);
+  background-size: 48px 48px;
+  opacity: 0.25;
+  pointer-events: none;
+  z-index: 0;
+}
+
+/* NAV */
+nav {
+  position: fixed;
+  top: 0; left: 0; right: 0;
+  z-index: 100;
+  background: rgba(8,12,18,0.92);
+  backdrop-filter: blur(12px);
+  border-bottom: 1px solid var(--border);
+  padding: 0 2rem;
+  height: 56px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.nav-brand {
+  font-family: 'DM Mono', monospace;
+  font-size: 0.78rem;
+  color: var(--cyan);
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.nav-links {
+  display: flex;
+  gap: 2rem;
+  list-style: none;
+}
+
+.nav-links a {
+  color: var(--text-muted);
+  text-decoration: none;
+  font-size: 0.78rem;
+  font-family: 'DM Mono', monospace;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  transition: color 0.2s;
+}
+.nav-links a:hover { color: var(--cyan); }
+
+/* HERO */
+.hero {
+  position: relative;
+  z-index: 1;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  padding: 7rem 2rem 4rem;
+  max-width: 1100px;
+  margin: 0 auto;
+}
+
+.hero-label {
+  font-family: 'DM Mono', monospace;
+  font-size: 0.72rem;
+  letter-spacing: 0.18em;
+  color: var(--cyan);
+  text-transform: uppercase;
+  margin-bottom: 1.5rem;
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+.hero-label::before {
+  content: '';
+  display: block;
+  width: 2rem;
+  height: 1px;
+  background: var(--cyan);
+}
+
+.hero h1 {
+  font-family: 'Syne', sans-serif;
+  font-size: clamp(2.8rem, 6vw, 5.5rem);
+  font-weight: 800;
+  line-height: 1.05;
+  color: var(--white);
+  margin-bottom: 1.5rem;
+}
+
+.hero h1 .accent {
+  color: var(--blue);
+}
+
+.hero-desc {
+  max-width: 640px;
+  font-size: 1.05rem;
+  color: var(--text-muted);
+  line-height: 1.8;
+  margin-bottom: 2.5rem;
+}
+
+.hero-meta {
+  display: flex;
+  gap: 2rem;
+  flex-wrap: wrap;
+}
+
+.meta-chip {
+  font-family: 'DM Mono', monospace;
+  font-size: 0.72rem;
+  padding: 0.35rem 0.85rem;
+  border: 1px solid var(--border);
+  border-radius: 4px;
+  color: var(--text-muted);
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+
+.meta-chip.highlight {
+  border-color: var(--blue);
+  color: var(--blue);
+  background: rgba(15,123,219,0.08);
+}
+
+/* STATS BAR */
+.stats-bar {
+  position: relative;
+  z-index: 1;
+  border-top: 1px solid var(--border);
+  border-bottom: 1px solid var(--border);
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  background: var(--surface);
+}
+
+.stat {
+  padding: 1.5rem 2rem;
+  border-right: 1px solid var(--border);
+  text-align: center;
+}
+.stat:last-child { border-right: none; }
+.stat-num {
+  font-family: 'Syne', sans-serif;
+  font-size: 2rem;
+  font-weight: 800;
+  color: var(--cyan);
+  display: block;
+}
+.stat-label {
+  font-size: 0.72rem;
+  color: var(--text-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  font-family: 'DM Mono', monospace;
+}
+
+/* SECTION */
+.section {
+  position: relative;
+  z-index: 1;
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 5rem 2rem;
+}
+
+.section-header {
+  margin-bottom: 3.5rem;
+}
+
+.section-eyebrow {
+  font-family: 'DM Mono', monospace;
+  font-size: 0.7rem;
+  letter-spacing: 0.2em;
+  color: var(--cyan);
+  text-transform: uppercase;
+  margin-bottom: 0.75rem;
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+.section-eyebrow::before {
+  content: '';
+  display: block;
+  width: 1.5rem;
+  height: 1px;
+  background: var(--cyan);
+}
+
+.section-title {
+  font-family: 'Syne', sans-serif;
+  font-size: clamp(1.8rem, 3.5vw, 2.8rem);
+  font-weight: 700;
+  color: var(--white);
+  line-height: 1.2;
+}
+
+.section-subtitle {
+  font-size: 1rem;
+  color: var(--text-muted);
+  margin-top: 0.75rem;
+  max-width: 600px;
+}
+
+/* DIVIDER */
+.divider {
+  position: relative;
+  z-index: 1;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, var(--border), transparent);
+  margin: 0 2rem;
+}
+
+/* CASE STUDY PART BANNER */
+.part-banner {
+  position: relative;
+  z-index: 1;
+  background: var(--surface);
+  border-top: 1px solid var(--border);
+  border-bottom: 1px solid var(--border);
+  padding: 3rem 2rem;
+  overflow: hidden;
+}
+
+.part-banner::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 0;
+  width: 4px;
+  height: 100%;
+  background: var(--blue);
+}
+
+.part-banner-inner {
+  max-width: 1100px;
+  margin: 0 auto;
+  display: flex;
+  align-items: flex-start;
+  gap: 2rem;
+}
+
+.part-number {
+  font-family: 'Syne', sans-serif;
+  font-size: 5rem;
+  font-weight: 800;
+  color: var(--text-dim);
+  line-height: 1;
+  flex-shrink: 0;
+  letter-spacing: -0.03em;
+}
+
+.part-content h2 {
+  font-family: 'Syne', sans-serif;
+  font-size: clamp(1.4rem, 2.5vw, 2rem);
+  font-weight: 700;
+  color: var(--white);
+  margin-bottom: 0.5rem;
+}
+
+.part-content p {
+  color: var(--text-muted);
+  max-width: 600px;
+}
+
+.part-badges {
+  display: flex;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+  margin-top: 1rem;
+}
+
+.badge {
+  font-family: 'DM Mono', monospace;
+  font-size: 0.65rem;
+  padding: 0.25rem 0.65rem;
+  border-radius: 3px;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+.badge-blue { background: rgba(15,123,219,0.15); color: var(--blue); border: 1px solid rgba(15,123,219,0.3); }
+.badge-cyan { background: rgba(56,194,224,0.12); color: var(--cyan); border: 1px solid rgba(56,194,224,0.25); }
+.badge-green { background: rgba(48,198,124,0.12); color: var(--green); border: 1px solid rgba(48,198,124,0.25); }
+
+/* TASK BLOCK */
+.task-block {
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  overflow: hidden;
+  margin-bottom: 3rem;
+  background: var(--surface);
+}
+
+.task-header {
+  background: var(--surface2);
+  border-bottom: 1px solid var(--border);
+  padding: 1.25rem 1.75rem;
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.task-num {
+  font-family: 'DM Mono', monospace;
+  font-size: 0.65rem;
+  color: var(--text-dim);
+  background: var(--bg);
+  border: 1px solid var(--border);
+  padding: 0.2rem 0.5rem;
+  border-radius: 3px;
+  letter-spacing: 0.1em;
+  white-space: nowrap;
+}
+
+.task-title {
+  font-family: 'Syne', sans-serif;
+  font-size: 1.05rem;
+  font-weight: 600;
+  color: var(--white);
+  flex: 1;
+}
+
+.task-body {
+  padding: 1.75rem;
+}
+
+.task-story {
+  color: var(--text);
+  font-size: 0.95rem;
+  line-height: 1.75;
+  margin-bottom: 1.5rem;
+  max-width: 750px;
+}
+
+.task-story strong {
+  color: var(--white);
+  font-weight: 600;
+}
+
+.task-story code {
+  font-family: 'DM Mono', monospace;
+  background: var(--bg);
+  border: 1px solid var(--border);
+  padding: 0.1rem 0.4rem;
+  border-radius: 3px;
+  font-size: 0.85em;
+  color: var(--cyan);
+}
+
+/* SCREENSHOTS GRID */
+.screenshots {
+  display: grid;
+  gap: 1rem;
+  margin-top: 1.25rem;
+}
+
+.screenshots.cols-2 { grid-template-columns: repeat(2, 1fr); }
+.screenshots.cols-3 { grid-template-columns: repeat(3, 1fr); }
+.screenshots.cols-1 { grid-template-columns: 1fr; max-width: 820px; }
+
+figure.screenshot {
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  overflow: hidden;
+  background: var(--bg);
+}
+
+figure.screenshot img {
+  width: 100%;
+  display: block;
+  transition: transform 0.3s ease;
+}
+
+figure.screenshot:hover img { transform: scale(1.01); }
+
+figure.screenshot figcaption {
+  padding: 0.6rem 0.85rem;
+  font-family: 'DM Mono', monospace;
+  font-size: 0.65rem;
+  color: var(--text-muted);
+  letter-spacing: 0.04em;
+  border-top: 1px solid var(--border);
+  background: var(--surface2);
+}
+
+.img-placeholder {
+  border: 1px dashed var(--border);
+  border-radius: 6px;
+  padding: 3rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--text-dim);
+  font-family: 'DM Mono', monospace;
+  font-size: 0.8rem;
+  background: var(--surface2);
+}
+
+/* HIGHLIGHT BOX */
+.highlight-box {
+  border-left: 3px solid var(--blue);
+  background: rgba(15,123,219,0.06);
+  padding: 1rem 1.25rem;
+  border-radius: 0 6px 6px 0;
+  margin: 1.25rem 0;
+}
+.highlight-box p {
+  color: var(--text);
+  font-size: 0.9rem;
+  line-height: 1.7;
+}
+.highlight-box p strong { color: var(--cyan); }
+
+/* TECH NOTE */
+.tech-note {
+  border: 1px solid rgba(245,166,35,0.25);
+  background: rgba(245,166,35,0.05);
+  border-radius: 6px;
+  padding: 1rem 1.25rem;
+  margin: 1.25rem 0;
+  display: flex;
+  gap: 0.75rem;
+}
+.tech-note-icon { color: var(--accent); font-size: 1.1rem; flex-shrink: 0; }
+.tech-note p { color: var(--text-muted); font-size: 0.88rem; line-height: 1.65; }
+
+/* CONCLUSION */
+.conclusion {
+  position: relative;
+  z-index: 1;
+  background: var(--surface);
+  border-top: 1px solid var(--border);
+  padding: 5rem 2rem;
+  text-align: center;
+}
+
+.conclusion-inner {
+  max-width: 700px;
+  margin: 0 auto;
+}
+
+.conclusion h2 {
+  font-family: 'Syne', sans-serif;
+  font-size: 2.2rem;
+  font-weight: 700;
+  color: var(--white);
+  margin-bottom: 1rem;
+}
+
+.conclusion p {
+  color: var(--text-muted);
+  margin-bottom: 0.75rem;
+  font-size: 0.98rem;
+}
+
+.skills-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 1rem;
+  margin-top: 2.5rem;
+  text-align: left;
+}
+
+.skill-item {
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  padding: 1rem 1.25rem;
+  background: var(--surface2);
+}
+
+.skill-item h4 {
+  font-family: 'Syne', sans-serif;
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: var(--cyan);
+  margin-bottom: 0.4rem;
+}
+.skill-item p {
+  font-size: 0.78rem;
+  color: var(--text-muted);
+  line-height: 1.5;
+  margin: 0;
+}
+
+footer {
+  position: relative;
+  z-index: 1;
+  border-top: 1px solid var(--border);
+  padding: 1.5rem 2rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+footer p {
+  font-family: 'DM Mono', monospace;
+  font-size: 0.68rem;
+  color: var(--text-dim);
+  letter-spacing: 0.06em;
+}
+
+@media (max-width: 768px) {
+  .screenshots.cols-2, .screenshots.cols-3 { grid-template-columns: 1fr; }
+  .stats-bar { grid-template-columns: repeat(2, 1fr); }
+  .skills-grid { grid-template-columns: 1fr; }
+  .part-number { font-size: 3rem; }
+  .nav-links { display: none; }
+}
+</style>
+</head>
+<body>
+
+<nav>
+  <span class="nav-brand">// Enterprise Windows Administration Lab</span>
+  <ul class="nav-links">
+    <li><a href="#overview">Overview</a></li>
+    <li><a href="#part1">Client Admin</a></li>
+    <li><a href="#part2">Server Domain</a></li>
+    <li><a href="#conclusion">Conclusion</a></li>
+  </ul>
+</nav>
+
+<!-- HERO -->
+<section class="hero" id="overview">
+  <div class="hero-label">Self-Directed Case Study · Windows Endpoint & Server Administration</div>
+  <h1>From the <span class="accent">Endpoint</span><br>to the <span class="accent">Domain</span></h1>
+    <p style="margin-top:10px; font-size:0.85rem; background:rgba(255,255,255,0.15); display:inline-block; padding:4px 14px; border-radius:20px; border:1px solid rgba(255,255,255,0.3); color:rgba(255,255,255,0.9);">✅ Portfolio Complete — v1.0  |  Windows Server 2022 · Enterprise Domain · AD DS</p>
+  <p class="hero-desc">
+    Two environments. One lab-simulated enterprise Windows environment — built from scratch, documented step by step, and verified with screenshots. This case study covers Windows 11 workstation configuration from the client side, and Windows Server 2022 domain deployment from the server side.
+  </p>
+  <div class="hero-meta">
+    <span class="meta-chip highlight">Windows Server 2022</span>
+    <span class="meta-chip">Windows 11 Enterprise</span>
+    <span class="meta-chip">AD DS · DHCP · DNS · GPO</span>
+    <span class="meta-chip">Evidence-Based Lab</span>
+  </div>
+</section>
+
+<div class="stats-bar">
+  <div class="stat"><span class="stat-num">2</span><span class="stat-label">Environments Built</span></div>
+  <div class="stat"><span class="stat-num">158</span><span class="stat-label">Screenshots Taken</span></div>
+  <div class="stat"><span class="stat-num">19</span><span class="stat-label">Tasks & Phases</span></div>
+  <div class="stat"><span class="stat-num">2+1</span><span class="stat-label">Servers + Workstation</span></div>
+</div>
+
+<!-- ──────────────── PART 1 ──────────────── -->
+<div class="part-banner" id="part1">
+  <div class="part-banner-inner">
+    <div class="part-number">01</div>
+    <div class="part-content">
+      <h2>Windows 11 Enterprise Workstation Administration</h2>
+      <p>Deploying, configuring, and hardening a Windows 11 workstation from scratch inside VMware Fusion on macOS — covering provisioning, local policies, PowerShell network management, Storage Spaces, and file sharing.</p>
+      <div class="part-badges">
+        <span class="badge badge-blue">VMware Fusion</span>
+        <span class="badge badge-cyan">Windows 11</span>
+        <span class="badge badge-cyan">PowerShell</span>
+        <span class="badge badge-green">Storage Spaces</span>
+        <span class="badge badge-blue">Local Policy</span>
+      </div>
+    </div>
+  </div>
+</div>
+
+<section class="section">
+
+  <!-- TASK 1 -->
+  <div class="task-block" id="task1">
+    <div class="task-header">
+      <span class="task-num">TASK 01</span>
+      <span class="task-title">Install Windows 11 on VMware Fusion — Named to Lab Convention</span>
+    </div>
+    <div class="task-body">
+      <p class="task-story">
+        Every enterprise build starts the same way — a blank virtual machine. For this task, I deployed a fresh Windows 11 installation inside <strong>VMware Fusion</strong> on my MacBook, using a consistent lab naming convention so each later configuration step could be traced clearly.
+      </p>
+      <p class="task-story">
+        Getting Windows 11 to install on Fusion required downloading the ISO, creating the VM with sufficient specs, and navigating through the Setup wizard. The machine name followed the lab convention during initial configuration — a detail that mattered for identification across subsequent screenshots.
+      </p>
+      <div class="screenshots cols-2">
+        <figure class="screenshot">
+      <img src="assets/screenshots/screenshot-001.jpg" alt="VMware Fusion — Windows 11 desktop running with identifiers redacted" loading="lazy">
+      <figcaption>VMware Fusion — Windows 11 desktop running with identifiers redacted</figcaption>
+    </figure>
+        <figure class="screenshot">
+      <img src="assets/screenshots/screenshot-002.jpg" alt="VMware page & Windows 11 installation running side by side on macOS" loading="lazy">
+      <figcaption>VMware page & Windows 11 installation running side by side on macOS</figcaption>
+    </figure>
+        <figure class="screenshot">
+      <img src="assets/screenshots/screenshot-003.jpg" alt="Windows 11 installation progress — setup copying files" loading="lazy">
+      <figcaption>Windows 11 installation progress — setup copying files</figcaption>
+    </figure>
+        <figure class="screenshot">
+      <img src="assets/screenshots/screenshot-004.jpg" alt="VM resources configured — CPU, RAM, and storage allocated for Windows 11" loading="lazy">
+      <figcaption>VM resources configured — CPU, RAM, and storage allocated for Windows 11</figcaption>
+    </figure>
+        <figure class="screenshot">
+      <img src="assets/screenshots/screenshot-005.jpg" alt="Windows 11 successfully booted with public identifiers redacted" loading="lazy">
+      <figcaption>Windows 11 successfully booted with public identifiers redacted</figcaption>
+    </figure>
+      </div>
+    </div>
+  </div>
+
+  <!-- TASK 2 -->
+  <div class="task-block" id="task2">
+    <div class="task-header">
+      <span class="task-num">TASK 02</span>
+      <span class="task-title">Provisioning Package — Create Local Admin Account via Windows Configuration Designer</span>
+    </div>
+    <div class="task-body">
+      <p class="task-story">
+        In enterprise environments, IT teams rarely configure each PC manually — they use <strong>provisioning packages</strong> to automate setup. This task required creating a .ppkg file using <strong>Windows Configuration Designer (WCD)</strong> that would create a lab-only local administrator account and apply it to the VM.
+      </p>
+      <p class="task-story">
+        I built the package step by step in WCD: selecting the account settings, defining local sign-in details, exporting the .ppkg file, and then applying it to the Windows 11 VM. After application, the account appeared under local users — confirming the package deployed correctly.
+      </p>
+      <div class="screenshots cols-3">
+        <figure class="screenshot">
+      <img src="assets/screenshots/screenshot-006.jpg" alt="Windows Configuration Designer open — starting a new provisioning package" loading="lazy">
+      <figcaption>Windows Configuration Designer open — starting a new provisioning package</figcaption>
+    </figure>
+        <figure class="screenshot">
+      <img src="assets/screenshots/screenshot-007.jpg" alt="Configuring account settings inside WCD — local admin account details entered" loading="lazy">
+      <figcaption>Configuring account settings inside WCD — local admin account details entered</figcaption>
+    </figure>
+        <figure class="screenshot">
+      <img src="assets/screenshots/screenshot-008.jpg" alt="Provisioning package settings review before export" loading="lazy">
+      <figcaption>Provisioning package settings review before export</figcaption>
+    </figure>
+        <figure class="screenshot">
+      <img src="assets/screenshots/screenshot-009.jpg" alt="Package exported successfully as .ppkg file" loading="lazy">
+      <figcaption>Package exported successfully as .ppkg file</figcaption>
+    </figure>
+        <figure class="screenshot">
+      <img src="assets/screenshots/screenshot-010.jpg" alt="Applying the provisioning package to Windows 11 VM" loading="lazy">
+      <figcaption>Applying the provisioning package to Windows 11 VM</figcaption>
+    </figure>
+        <figure class="screenshot">
+      <img src="assets/screenshots/screenshot-011.jpg" alt="Package installation confirmation — applying settings" loading="lazy">
+      <figcaption>Package installation confirmation — applying settings</figcaption>
+    </figure>
+        <figure class="screenshot">
+      <img src="assets/screenshots/screenshot-012.jpg" alt="Local Users and Groups — lab admin account appears post-provisioning" loading="lazy">
+      <figcaption>Local Users and Groups — lab admin account appears post-provisioning</figcaption>
+    </figure>
+        <figure class="screenshot">
+      <img src="assets/screenshots/screenshot-013.jpg" alt="Account verified in Computer Management" loading="lazy">
+      <figcaption>Account verified in Computer Management</figcaption>
+    </figure>
+        <figure class="screenshot">
+      <img src="assets/screenshots/screenshot-014.jpg" alt="Admin account confirmed active with correct group membership" loading="lazy">
+      <figcaption>Admin account confirmed active with correct group membership</figcaption>
+    </figure>
+      </div>
+    </div>
+  </div>
+
+  <!-- TASK 3 -->
+  <div class="task-block" id="task3">
+    <div class="task-header">
+      <span class="task-num">TASK 03</span>
+      <span class="task-title">Local Security Policy — Enforce UAC Dialog Box &amp; Secure Desktop Dimming</span>
+    </div>
+    <div class="task-body">
+      <p class="task-story">
+        Security hardening is non-negotiable in any enterprise environment. This task required configuring <strong>Local Security Policy</strong> to enforce UAC (User Account Control) behavior — specifically, ensuring that any privileged action triggers a secure authentication prompt and <strong>dims the desktop</strong> (Secure Desktop mode). This prevents malware from spoofing the UAC dialog.
+      </p>
+      <p class="task-story">
+        I accessed <code>secpol.msc</code>, navigated to <strong>Local Policies → Security Options</strong>, and located the UAC settings. I configured the elevation prompt for administrators in Admin Approval Mode to require authentication on the secure desktop. Screenshots captured the before/after state of each policy setting.
+      </p>
+      <div class="tech-note">
+        <span class="tech-note-icon">⚠</span>
+        <p>Note: Some screens include redaction where lab identifiers appeared. The visible policy windows remain the relevant evidence for this task.</p>
+      </div>
+      <div class="screenshots cols-2">
+        <figure class="screenshot">
+      <img src="assets/screenshots/screenshot-015.jpg" alt="secpol.msc open — Local Security Policy console" loading="lazy">
+      <figcaption>secpol.msc open — Local Security Policy console</figcaption>
+    </figure>
+        <figure class="screenshot">
+      <img src="assets/screenshots/screenshot-016.jpg" alt="Security Options list — UAC policies visible" loading="lazy">
+      <figcaption>Security Options list — UAC policies visible</figcaption>
+    </figure>
+        <figure class="screenshot">
+      <img src="assets/screenshots/screenshot-017.jpg" alt="UAC — elevation prompt configured for secure authentication" loading="lazy">
+      <figcaption>UAC — elevation prompt configured for secure authentication</figcaption>
+    </figure>
+        <figure class="screenshot">
+      <img src="assets/screenshots/screenshot-018.jpg" alt="Secure Desktop dimming policy — enabled" loading="lazy">
+      <figcaption>Secure Desktop dimming policy — enabled</figcaption>
+    </figure>
+        <figure class="screenshot">
+      <img src="assets/screenshots/screenshot-019.jpg" alt="Policy confirmation — UAC elevation on secure desktop configured" loading="lazy">
+      <figcaption>Policy confirmation — UAC elevation on secure desktop configured</figcaption>
+    </figure>
+        <figure class="screenshot">
+      <img src="assets/screenshots/screenshot-020.jpg" alt="Local policy settings verified — all UAC options correctly set" loading="lazy">
+      <figcaption>Local policy settings verified — all UAC options correctly set</figcaption>
+    </figure>
+      </div>
+      <div class="screenshots cols-3">
+        <figure class="screenshot">
+      <img src="assets/screenshots/screenshot-021.jpg" alt="Additional UAC verification screenshot" loading="lazy">
+      <figcaption>Additional UAC verification screenshot</figcaption>
+    </figure>
+        <figure class="screenshot">
+      <img src="assets/screenshots/screenshot-022.jpg" alt="Policy applied — testing UAC prompt triggers correctly" loading="lazy">
+      <figcaption>Policy applied — testing UAC prompt triggers correctly</figcaption>
+    </figure>
+        <figure class="screenshot">
+      <img src="assets/screenshots/screenshot-023.jpg" alt="Screen dims on UAC trigger — secure desktop active" loading="lazy">
+      <figcaption>Screen dims on UAC trigger — secure desktop active</figcaption>
+    </figure>
+        <figure class="screenshot">
+      <img src="assets/screenshots/screenshot-024.jpg" alt="UAC authentication dialog visible" loading="lazy">
+      <figcaption>UAC authentication dialog visible</figcaption>
+    </figure>
+        <figure class="screenshot">
+      <img src="assets/screenshots/screenshot-025.jpg" alt="Final policy state confirmed in secpol.msc" loading="lazy">
+      <figcaption>Final policy state confirmed in secpol.msc</figcaption>
+    </figure>
+      </div>
+    </div>
+  </div>
+
+  <!-- TASK 4 -->
+  <div class="task-block" id="task4">
+    <div class="task-header">
+      <span class="task-num">TASK 04</span>
+      <span class="task-title">Pin Microsoft News to Start Menu &amp; Export Taskbar Layout via PowerShell</span>
+    </div>
+    <div class="task-body">
+      <p class="task-story">
+        Standardized Start menu and taskbar layouts are a common enterprise requirement — IT departments often deploy a locked-down layout to ensure consistency across all endpoints. This task required pinning the <strong>Microsoft News</strong> app to the Start menu, then exporting the taskbar configuration to an XML file using <strong>PowerShell</strong>.
+      </p>
+      <p class="task-story">
+        I pinned the app through the Start menu UI, then used <code>Export-StartLayout</code> and related cmdlets in PowerShell to export the configuration. The resulting layout file could be deployed company-wide through Group Policy — a direct bridge to what I'd implement on the server side later.
+      </p>
+      <div class="screenshots cols-2">
+        <figure class="screenshot">
+      <img src="assets/screenshots/screenshot-026.jpg" alt="Start menu open — Microsoft News app located for pinning" loading="lazy">
+      <figcaption>Start menu open — Microsoft News app located for pinning</figcaption>
+    </figure>
+        <figure class="screenshot">
+      <img src="assets/screenshots/screenshot-027.jpg" alt="Microsoft News pinned to Start menu — confirmation" loading="lazy">
+      <figcaption>Microsoft News pinned to Start menu — confirmation</figcaption>
+    </figure>
+        <figure class="screenshot">
+      <img src="assets/screenshots/screenshot-028.jpg" alt="PowerShell open — Export-StartLayout command ready" loading="lazy">
+      <figcaption>PowerShell open — Export-StartLayout command ready</figcaption>
+    </figure>
+        <figure class="screenshot">
+      <img src="assets/screenshots/screenshot-029.jpg" alt="Taskbar layout exported to XML file successfully" loading="lazy">
+      <figcaption>Taskbar layout exported to XML file successfully</figcaption>
+    </figure>
+        <figure class="screenshot">
+      <img src="assets/screenshots/screenshot-030.jpg" alt="XML layout file verified in File Explorer" loading="lazy">
+      <figcaption>XML layout file verified in File Explorer</figcaption>
+    </figure>
+        <figure class="screenshot">
+      <img src="assets/screenshots/screenshot-031.jpg" alt="Layout file contents — pinned apps visible in XML" loading="lazy">
+      <figcaption>Layout file contents — pinned apps visible in XML</figcaption>
+    </figure>
+      </div>
+    </div>
+  </div>
+
+  <!-- TASK 5 -->
+  <div class="task-block" id="task5">
+    <div class="task-header">
+      <span class="task-num">TASK 05</span>
+      <span class="task-title">PowerShell Network Configuration — Set Static IPv4 Address</span>
+    </div>
+    <div class="task-body">
+      <p class="task-story">
+        Network configuration via PowerShell is a core sysadmin skill. Rather than using the GUI, this task required setting a <strong>static IPv4 address</strong> of <code>redacted lab IPv4 address</code> directly through the command line using <code>New-NetIPAddress</code>. This approach is scriptable, repeatable, and deployable at scale — exactly how enterprise teams manage endpoints.
+      </p>
+      <p class="task-story">
+        I identified the correct adapter using <code>Get-NetAdapter</code>, removed any existing DHCP-assigned address, and applied the static configuration. Running <code>ipconfig /all</code> after confirmed the address was correctly assigned to the adapter.
+      </p>
+      <div class="screenshots cols-2">
+        <figure class="screenshot">
+      <img src="assets/screenshots/screenshot-032.jpg" alt="PowerShell — Get-NetAdapter showing available network interfaces" loading="lazy">
+      <figcaption>PowerShell — Get-NetAdapter showing available network interfaces</figcaption>
+    </figure>
+        <figure class="screenshot">
+      <img src="assets/screenshots/screenshot-033.jpg" alt="New-NetIPAddress command executed — static IP redacted lab IPv4 address applied" loading="lazy">
+      <figcaption>New-NetIPAddress command executed — static IP redacted lab IPv4 address applied</figcaption>
+    </figure>
+        <figure class="screenshot">
+      <img src="assets/screenshots/screenshot-034.jpg" alt="ipconfig /all output — static IP confirmed on adapter" loading="lazy">
+      <figcaption>ipconfig /all output — static IP confirmed on adapter</figcaption>
+    </figure>
+        <figure class="screenshot">
+      <img src="assets/screenshots/screenshot-035.jpg" alt="Network adapter properties — static IP visible in settings" loading="lazy">
+      <figcaption>Network adapter properties — static IP visible in settings</figcaption>
+    </figure>
+        <figure class="screenshot">
+      <img src="assets/screenshots/screenshot-036.jpg" alt="Final verification — adapter showing redacted lab IPv4 address assigned" loading="lazy">
+      <figcaption>Final verification — adapter showing redacted lab IPv4 address assigned</figcaption>
+    </figure>
+      </div>
+    </div>
+  </div>
+
+  <!-- TASK 6 -->
+  <div class="task-block" id="task6">
+    <div class="task-header">
+      <span class="task-num">TASK 06</span>
+      <span class="task-title">Storage Spaces — Create a 2-Way Mirror Storage Pool</span>
+    </div>
+    <div class="task-body">
+      <p class="task-story">
+        <strong>Storage Spaces</strong> is Windows' software-defined storage solution — it pools physical disks into resilient volumes. A <strong>2-way mirror</strong> writes data to two disks simultaneously, providing fault tolerance if one drive fails. This task required creating a Storage Pool from available virtual disks, then creating a 2-way mirror virtual disk on top of it.
+      </p>
+      <p class="task-story">
+        I navigated to <strong>Server Manager → File and Storage Services → Storage Pools</strong>, added the available disks to a pool, and created the mirrored virtual disk. The resulting volume was mounted and ready for use — setting up the foundation for the file sharing tasks that followed.
+      </p>
+      <div class="screenshots cols-2">
+        <figure class="screenshot">
+      <img src="assets/screenshots/screenshot-037.jpg" alt="Storage Spaces wizard open — creating new storage pool" loading="lazy">
+      <figcaption>Storage Spaces wizard open — creating new storage pool</figcaption>
+    </figure>
+        <figure class="screenshot">
+      <img src="assets/screenshots/screenshot-038.jpg" alt="Selecting physical disks for the storage pool" loading="lazy">
+      <figcaption>Selecting physical disks for the storage pool</figcaption>
+    </figure>
+        <figure class="screenshot">
+      <img src="assets/screenshots/screenshot-039.jpg" alt="2-Way Mirror selected as resiliency type" loading="lazy">
+      <figcaption>2-Way Mirror selected as resiliency type</figcaption>
+    </figure>
+        <figure class="screenshot">
+      <img src="assets/screenshots/screenshot-040.jpg" alt="Storage pool and virtual disk being created" loading="lazy">
+      <figcaption>Storage pool and virtual disk being created</figcaption>
+    </figure>
+        <figure class="screenshot">
+      <img src="assets/screenshots/screenshot-041.jpg" alt="Storage pool successfully created and visible in File Explorer" loading="lazy">
+      <figcaption>Storage pool successfully created and visible in File Explorer</figcaption>
+    </figure>
+      </div>
+    </div>
+  </div>
+
+  <!-- TASK 7 -->
+  <div class="task-block" id="task7">
+    <div class="task-header">
+      <span class="task-num">TASK 07</span>
+      <span class="task-title">Create "File Share" Folder on the Storage Space Volume</span>
+    </div>
+    <div class="task-body">
+      <p class="task-story">
+        With the storage pool created, the next step was creating the <strong>File Share</strong> folder on the new volume — this would serve as the shared network resource for the next task. Placing it on the mirrored storage space ensures any data stored here has redundancy built in.
+      </p>
+      <div class="screenshots cols-2">
+        <figure class="screenshot">
+      <img src="assets/screenshots/screenshot-042.jpg" alt="Storage space volume visible in File Explorer" loading="lazy">
+      <figcaption>Storage space volume visible in File Explorer</figcaption>
+    </figure>
+        <figure class="screenshot">
+      <img src="assets/screenshots/screenshot-043.jpg" alt="File Share folder created on the mirrored volume" loading="lazy">
+      <figcaption>File Share folder created on the mirrored volume</figcaption>
+    </figure>
+        <figure class="screenshot">
+      <img src="assets/screenshots/screenshot-044.jpg" alt="Folder properties — confirming location on storage pool drive" loading="lazy">
+      <figcaption>Folder properties — confirming location on storage pool drive</figcaption>
+    </figure>
+        <figure class="screenshot">
+      <img src="assets/screenshots/screenshot-045.jpg" alt="File Share folder ready for permissions configuration" loading="lazy">
+      <figcaption>File Share folder ready for permissions configuration</figcaption>
+    </figure>
+      </div>
+    </div>
+  </div>
+
+  <!-- TASK 8 -->
+  <div class="task-block" id="task8">
+    <div class="task-header">
+      <span class="task-num">TASK 08</span>
+      <span class="task-title">Configure Network Share &amp; NTFS Permissions on File Share Folder</span>
+    </div>
+    <div class="task-body">
+      <p class="task-story">
+        File sharing permissions in Windows are a two-layer system: <strong>Share permissions</strong> control network access at the share level, while <strong>NTFS permissions</strong> control access at the file system level. The effective permissions are the most restrictive of the two. This task required sharing the File Share folder with specific user access levels — read vs. read/write — matching a permission matrix defined in the course.
+      </p>
+      <p class="task-story">
+        I right-clicked the folder, set up sharing through Advanced Sharing, configured the share permissions, then drilled into Security to set NTFS permissions. Each user/group was assigned the correct permission level and verified by reviewing the access control list.
+      </p>
+      <div class="screenshots cols-3">
+        <figure class="screenshot">
+      <img src="assets/screenshots/screenshot-046.jpg" alt="Advanced Sharing dialog — folder being shared on network" loading="lazy">
+      <figcaption>Advanced Sharing dialog — folder being shared on network</figcaption>
+    </figure>
+        <figure class="screenshot">
+      <img src="assets/screenshots/screenshot-047.jpg" alt="Share permissions dialog — user permissions being configured" loading="lazy">
+      <figcaption>Share permissions dialog — user permissions being configured</figcaption>
+    </figure>
+        <figure class="screenshot">
+      <img src="assets/screenshots/screenshot-048.jpg" alt="Security tab — NTFS permissions for the File Share folder" loading="lazy">
+      <figcaption>Security tab — NTFS permissions for the File Share folder</figcaption>
+    </figure>
+        <figure class="screenshot">
+      <img src="assets/screenshots/screenshot-049.jpg" alt="Read permission assigned to designated user" loading="lazy">
+      <figcaption>Read permission assigned to designated user</figcaption>
+    </figure>
+        <figure class="screenshot">
+      <img src="assets/screenshots/screenshot-050.jpg" alt="Read/Write permissions assigned to second user" loading="lazy">
+      <figcaption>Read/Write permissions assigned to second user</figcaption>
+    </figure>
+        <figure class="screenshot">
+      <img src="assets/screenshots/screenshot-051.jpg" alt="Permission summary — all users configured correctly" loading="lazy">
+      <figcaption>Permission summary — all users configured correctly</figcaption>
+    </figure>
+        <figure class="screenshot">
+      <img src="assets/screenshots/screenshot-052.jpg" alt="Network path verified — folder accessible via UNC path" loading="lazy">
+      <figcaption>Network path verified — folder accessible via UNC path</figcaption>
+    </figure>
+        <figure class="screenshot">
+      <img src="assets/screenshots/screenshot-053.jpg" alt="Final NTFS permission ACL confirmed" loading="lazy">
+      <figcaption>Final NTFS permission ACL confirmed</figcaption>
+    </figure>
+      </div>
+    </div>
+  </div>
+
+  <!-- TASK 9 -->
+  <div class="task-block" id="task9">
+    <div class="task-header">
+      <span class="task-num">TASK 09</span>
+      <span class="task-title">Deploy Microsoft Whiteboard from Microsoft Store</span>
+    </div>
+    <div class="task-body">
+      <p class="task-story">
+        Application deployment from the <strong>Microsoft Store</strong> is a standard workflow in modern endpoint management. This task required installing <strong>Microsoft Whiteboard</strong> from the Store — simulating how IT might push a collaboration app to a managed workstation. Post-install verification confirmed the app launched correctly and was visible in the Start menu.
+      </p>
+      <div class="screenshots cols-2">
+        <figure class="screenshot">
+      <img src="assets/screenshots/screenshot-054.jpg" alt="Microsoft Store open — searching for Microsoft Whiteboard" loading="lazy">
+      <figcaption>Microsoft Store open — searching for Microsoft Whiteboard</figcaption>
+    </figure>
+        <figure class="screenshot">
+      <img src="assets/screenshots/screenshot-055.jpg" alt="Whiteboard app page — clicking Install" loading="lazy">
+      <figcaption>Whiteboard app page — clicking Install</figcaption>
+    </figure>
+        <figure class="screenshot">
+      <img src="assets/screenshots/screenshot-056.jpg" alt="Installation in progress — downloading and installing" loading="lazy">
+      <figcaption>Installation in progress — downloading and installing</figcaption>
+    </figure>
+        <figure class="screenshot">
+      <img src="assets/screenshots/screenshot-057.jpg" alt="Whiteboard successfully installed — visible in Start menu" loading="lazy">
+      <figcaption>Whiteboard successfully installed — visible in Start menu</figcaption>
+    </figure>
+        <figure class="screenshot">
+      <img src="assets/screenshots/screenshot-058.jpg" alt="Microsoft Whiteboard launched and running on Windows 11" loading="lazy">
+      <figcaption>Microsoft Whiteboard launched and running on Windows 11</figcaption>
+    </figure>
+        <figure class="screenshot">
+      <img src="assets/screenshots/screenshot-059.jpg" alt="App verified — Whiteboard interface open and functional" loading="lazy">
+      <figcaption>App verified — Whiteboard interface open and functional</figcaption>
+    </figure>
+        <figure class="screenshot">
+      <img src="assets/screenshots/screenshot-060.jpg" alt="Whiteboard confirmed working — installation task complete" loading="lazy">
+      <figcaption>Whiteboard confirmed working — installation task complete</figcaption>
+    </figure>
+      </div>
+    </div>
+  </div>
+
+  <!-- TASK 10 -->
+  <div class="task-block" id="task10">
+    <div class="task-header">
+      <span class="task-num">TASK 10</span>
+      <span class="task-title">Configure File History — 30-Day Retention on Storage Space</span>
+    </div>
+    <div class="task-body">
+      <p class="task-story">
+        <strong>File History</strong> is Windows' built-in backup and versioning solution — it automatically saves copies of files to a designated drive, allowing recovery of older versions. This task required configuring it to keep historical copies for <strong>30 days</strong>, pointed at the storage space volume created earlier.
+      </p>
+      <div class="tech-note">
+        <span class="tech-note-icon">ℹ</span>
+        <p>Note to evaluator: For this task, I was on my Mac just like all other tasks. The File History configuration steps were completed within the VMware environment — some screens may vary slightly due to virtualization layer differences with storage device detection.</p>
+      </div>
+      <div class="screenshots cols-2">
+        <figure class="screenshot">
+      <img src="assets/screenshots/screenshot-061.jpg" alt="File History settings — selecting the storage space as backup drive" loading="lazy">
+      <figcaption>File History settings — selecting the storage space as backup drive</figcaption>
+    </figure>
+        <figure class="screenshot">
+      <img src="assets/screenshots/screenshot-062.jpg" alt="Advanced Settings — Keep saved versions set to 30 days" loading="lazy">
+      <figcaption>Advanced Settings — Keep saved versions set to 30 days</figcaption>
+    </figure>
+        <figure class="screenshot">
+      <img src="assets/screenshots/screenshot-063.jpg" alt="File History running — first backup in progress" loading="lazy">
+      <figcaption>File History running — first backup in progress</figcaption>
+    </figure>
+        <figure class="screenshot">
+      <img src="assets/screenshots/screenshot-064.jpg" alt="Backup confirmed — File History active on storage space volume" loading="lazy">
+      <figcaption>Backup confirmed — File History active on storage space volume</figcaption>
+    </figure>
+      </div>
+    </div>
+  </div>
+
+</section>
+
+<div class="divider"></div>
+
+<!-- ──────────────── PART 2 ──────────────── -->
+<div class="part-banner" id="part2">
+  <div class="part-banner-inner">
+    <div class="part-number">02</div>
+    <div class="part-content">
+      <h2>Windows Server 2022 Enterprise Domain</h2>
+      <p>Building a full multi-server Windows Server 2022 domain from the ground up inside UTM on an Apple Silicon MacBook — two servers, one workstation, a complete Active Directory domain, DHCP, DNS, GPOs, and file services, all verified and documented.</p>
+      <div class="part-badges">
+        <span class="badge badge-blue">Windows Server 2022</span>
+        <span class="badge badge-cyan">Active Directory</span>
+        <span class="badge badge-cyan">DHCP / DNS</span>
+        <span class="badge badge-green">Group Policy</span>
+        <span class="badge badge-blue">UTM · Apple Silicon</span>
+        <span class="badge badge-green">NTFS Permissions</span>
+      </div>
+    </div>
+  </div>
+</div>
+
+<section class="section">
+
+  <!-- PHASE 1 -->
+  <div class="task-block" id="phase1">
+    <div class="task-header">
+      <span class="task-num">PHASE 01</span>
+      <span class="task-title">Virtual Machine Provisioning — Windows Server 2022 on UTM (Apple Silicon)</span>
+    </div>
+    <div class="task-body">
+      <p class="task-story">
+        The first challenge wasn't the server — it was the hardware. Building Windows Server 2022 on an <strong>Apple Silicon MacBook Air</strong> required using <strong>UTM</strong>, a virtualization platform for macOS that supports both ARM and x86 emulation. I created the primary Domain Controller VM (<code>LAB-DC01</code>) with <strong>4 vCPUs, 8GB RAM, and 64GB storage</strong> in x86_64 mode, then installed Windows Server 2022 Datacenter Evaluation (Desktop Experience) for full GUI access.
+      </p>
+      <div class="highlight-box">
+        <p><strong>VM Specs — SRV01 (Domain Controller):</strong> 4 vCPUs · 8 GB RAM · 64 GB storage · x86_64 architecture · Windows Server 2022 Datacenter Evaluation (Desktop Experience)</p>
+      </div>
+      <div class="screenshots cols-2">
+        <figure class="screenshot">
+      <img src="assets/screenshots/screenshot-065.jpg" alt="UTM VM configuration evidence with identifiers redacted" loading="lazy">
+      <figcaption>UTM VM configuration evidence with identifiers redacted</figcaption>
+    </figure>
+        <figure class="screenshot">
+      <img src="assets/screenshots/screenshot-066.jpg" alt="UTM VM resource summary — 4 vCPUs, 8GB RAM, 64GB storage confirmed" loading="lazy">
+      <figcaption>UTM VM resource summary — 4 vCPUs, 8GB RAM, 64GB storage confirmed</figcaption>
+    </figure>
+        <figure class="screenshot">
+      <img src="assets/screenshots/screenshot-067.jpg" alt="Windows Server 2022 edition selection — Datacenter Evaluation with Desktop Experience" loading="lazy">
+      <figcaption>Windows Server 2022 edition selection — Datacenter Evaluation with Desktop Experience</figcaption>
+    </figure>
+        <figure class="screenshot">
+      <img src="assets/screenshots/screenshot-068.jpg" alt="Windows Server 2022 installation progress — files copying" loading="lazy">
+      <figcaption>Windows Server 2022 installation progress — files copying</figcaption>
+    </figure>
+        <figure class="screenshot">
+      <img src="assets/screenshots/screenshot-069.jpg" alt="Completing built-in Administrator setup during first-time setup" loading="lazy">
+      <figcaption>Completing built-in Administrator setup during first-time setup</figcaption>
+    </figure>
+        <figure class="screenshot">
+      <img src="assets/screenshots/screenshot-070.jpg" alt="Windows Server 2022 boots to lock screen — Ctrl+Alt+Delete prompt" loading="lazy">
+      <figcaption>Windows Server 2022 boots to lock screen — Ctrl+Alt+Delete prompt</figcaption>
+    </figure>
+        <figure class="screenshot">
+      <img src="assets/screenshots/screenshot-071.jpg" alt="Server Manager loads automatically after first login" loading="lazy">
+      <figcaption>Server Manager loads automatically after first login</figcaption>
+    </figure>
+      </div>
+    </div>
+  </div>
+
+  <!-- PHASE 2 -->
+  <div class="task-block" id="phase2">
+    <div class="task-header">
+      <span class="task-num">PHASE 02</span>
+      <span class="task-title">Active Directory Domain Services — Promoting SRV01 to Domain Controller</span>
+    </div>
+    <div class="task-body">
+      <p class="task-story">
+        This was the moment the server transformed from a standalone box into the <strong>authority of a lab Active Directory domain</strong>. I installed the <strong>AD DS role</strong> through Server Manager's Add Roles and Features Wizard, selected the lab domain controller as the target, and began the promotion process. Choosing <strong>"Add a new forest"</strong> created the lab-local root domain.
+      </p>
+      <p class="task-story">
+        The promotion wizard walked through DNS integration, Global Catalog designation, recovery-mode setup, and NetBIOS naming. The wizard auto-generated a PowerShell deployment script, showing that the configuration could be repeated and automated. After the final prerequisites check passed with the expected DNS delegation warning in an isolated lab, the server rebooted and came back online as the domain controller.
+      </p>
+      <div class="screenshots cols-3">
+        <figure class="screenshot">
+      <img src="assets/screenshots/screenshot-072.jpg" alt="Server Manager — Local Server overview, ready for role installation" loading="lazy">
+      <figcaption>Server Manager — Local Server overview, ready for role installation</figcaption>
+    </figure>
+        <figure class="screenshot">
+      <img src="assets/screenshots/screenshot-073.jpg" alt="Add Roles and Features Wizard — Before You Begin" loading="lazy">
+      <figcaption>Add Roles and Features Wizard — Before You Begin</figcaption>
+    </figure>
+        <figure class="screenshot">
+      <img src="assets/screenshots/screenshot-074.jpg" alt="Selecting the lab domain controller as the destination server" loading="lazy">
+      <figcaption>Selecting the lab domain controller as the destination server</figcaption>
+    </figure>
+        <figure class="screenshot">
+      <img src="assets/screenshots/screenshot-075.jpg" alt="AD DS role selected for installation" loading="lazy">
+      <figcaption>AD DS role selected for installation</figcaption>
+    </figure>
+        <figure class="screenshot">
+      <img src="assets/screenshots/screenshot-076.jpg" alt="AD DS information page — DNS requirements reviewed" loading="lazy">
+      <figcaption>AD DS information page — DNS requirements reviewed</figcaption>
+    </figure>
+        <figure class="screenshot">
+      <img src="assets/screenshots/screenshot-077.jpg" alt="AD DS installation confirmation — components listed" loading="lazy">
+      <figcaption>AD DS installation confirmation — components listed</figcaption>
+    </figure>
+        <figure class="screenshot">
+      <img src="assets/screenshots/screenshot-078.jpg" alt="AD DS installation in progress on SRV01" loading="lazy">
+      <figcaption>AD DS installation in progress on SRV01</figcaption>
+    </figure>
+        <figure class="screenshot">
+      <img src="assets/screenshots/screenshot-079.jpg" alt="AD DS Configuration Wizard — Add New Forest selected for lab domain" loading="lazy">
+      <figcaption>AD DS Configuration Wizard — Add New Forest selected for lab domain</figcaption>
+    </figure>
+        <figure class="screenshot">
+      <img src="assets/screenshots/screenshot-080.jpg" alt="Domain Controller Options — DNS and Global Catalog enabled" loading="lazy">
+      <figcaption>Domain Controller Options — DNS and Global Catalog enabled</figcaption>
+    </figure>
+        <figure class="screenshot">
+      <img src="assets/screenshots/screenshot-081.jpg" alt="DNS Options — no delegation required in standalone lab environment" loading="lazy">
+      <figcaption>DNS Options — no delegation required in standalone lab environment</figcaption>
+    </figure>
+        <figure class="screenshot">
+      <img src="assets/screenshots/screenshot-082.jpg" alt="Additional Options — NetBIOS name ANIK auto-populated" loading="lazy">
+      <figcaption>Additional Options — NetBIOS name ANIK auto-populated</figcaption>
+    </figure>
+        <figure class="screenshot">
+      <img src="assets/screenshots/screenshot-083.jpg" alt="AD DS Default Paths — NTDS, SYSVOL confirmed" loading="lazy">
+      <figcaption>AD DS Default Paths — NTDS, SYSVOL confirmed</figcaption>
+    </figure>
+        <figure class="screenshot">
+      <img src="assets/screenshots/screenshot-084.jpg" alt="AD DS Prerequisites Check — all checks passed" loading="lazy">
+      <figcaption>AD DS Prerequisites Check — all checks passed</figcaption>
+    </figure>
+        <figure class="screenshot">
+      <img src="assets/screenshots/screenshot-085.jpg" alt="First domain-controller logon — promotion confirmed" loading="lazy">
+      <figcaption>First domain-controller logon — promotion confirmed</figcaption>
+    </figure>
+      </div>
+    </div>
+  </div>
+
+  <!-- PHASE 3 -->
+  <div class="task-block" id="phase3">
+    <div class="task-header">
+      <span class="task-num">PHASE 03</span>
+      <span class="task-title">DHCP Server — Multi-Site Scopes for Toronto &amp; Montreal</span>
+    </div>
+    <div class="task-body">
+      <p class="task-story">
+        With the domain running, the next critical service was <strong>DHCP</strong> — the mechanism by which clients receive an IP address, gateway, and DNS server automatically. I installed the DHCP Server role on the domain controller after assigning a static IPv4 address so DHCP and DNS services were anchored to a fixed address.
+      </p>
+      <p class="task-story">
+        I created one primary lab scope plus four simulated site scopes to model a <strong>multi-site enterprise network</strong> with offices in Toronto and Montreal. Each scope was configured with subnet ranges, exclusions, and scope options (Router 003, DNS Server 006, DNS Domain Name 015). A DHCP reservation for the member server ensured it would receive a consistent lab address.
+      </p>
+      <div class="highlight-box">
+        <p><strong>Scopes created:</strong> one primary lab subnet plus four simulated site scopes for Toronto and Montreal lab/office segments.</p>
+      </div>
+      <div class="screenshots cols-3">
+        <figure class="screenshot">
+      <img src="assets/screenshots/screenshot-086.jpg" alt="DHCP installation warning — static IP required before proceeding" loading="lazy">
+      <figcaption>DHCP installation warning — static IP required before proceeding</figcaption>
+    </figure>
+        <figure class="screenshot">
+      <img src="assets/screenshots/screenshot-087.jpg" alt="Static IPv4 address applied to the domain controller" loading="lazy">
+      <figcaption>Static IPv4 address applied to the domain controller</figcaption>
+    </figure>
+        <figure class="screenshot">
+      <img src="assets/screenshots/screenshot-088.jpg" alt="DHCP Server role selected for installation" loading="lazy">
+      <figcaption>DHCP Server role selected for installation</figcaption>
+    </figure>
+        <figure class="screenshot">
+      <img src="assets/screenshots/screenshot-089.jpg" alt="DHCP Server role installation in progress" loading="lazy">
+      <figcaption>DHCP Server role installation in progress</figcaption>
+    </figure>
+        <figure class="screenshot">
+      <img src="assets/screenshots/screenshot-090.jpg" alt="New Scope Wizard — primary lab scope named and described" loading="lazy">
+      <figcaption>New Scope Wizard — primary lab scope named and described</figcaption>
+    </figure>
+        <figure class="screenshot">
+      <img src="assets/screenshots/screenshot-091.jpg" alt="DHCP scope activated — Yes, activate now selected" loading="lazy">
+      <figcaption>DHCP scope activated — Yes, activate now selected</figcaption>
+    </figure>
+        <figure class="screenshot">
+      <img src="assets/screenshots/screenshot-092.jpg" alt="Primary lab scope visible and active under IPv4 in DHCP Manager" loading="lazy">
+      <figcaption>Primary lab scope visible and active under IPv4 in DHCP Manager</figcaption>
+    </figure>
+        <figure class="screenshot">
+      <img src="assets/screenshots/screenshot-093.jpg" alt="Multiple scopes visible — Toronto and Montreal sites all configured" loading="lazy">
+      <figcaption>Multiple scopes visible — Toronto and Montreal sites all configured</figcaption>
+    </figure>
+      </div>
+    </div>
+  </div>
+
+  <!-- PHASE 4 -->
+  <div class="task-block" id="phase4">
+    <div class="task-header">
+      <span class="task-num">PHASE 04</span>
+      <span class="task-title">Second Server Deployment — SRV02 Joins the Domain</span>
+    </div>
+    <div class="task-body">
+      <p class="task-story">
+        A single-server domain is a lab — an enterprise network normally includes member servers. I deployed a second Windows Server 2022 VM, <strong>LAB-SRV02</strong>, as a member server for domain lab services. The process mirrored the first server installation: create the UTM VM, install Windows Server 2022 Datacenter, complete first-time setup, rename the machine, and then complete the domain join.
+      </p>
+      <p class="task-story">
+        Joining the domain required pointing the member server's DNS to the domain controller, completing domain authentication, and confirming the successful domain join. A static IP and DHCP reservation were then configured, with hardware identifiers redacted in public evidence.
+      </p>
+      <div class="screenshots cols-3">
+        <figure class="screenshot">
+      <img src="assets/screenshots/screenshot-094.jpg" alt="UTM VM creation for SRV02 — default Windows template, x86_64" loading="lazy">
+      <figcaption>UTM VM creation for SRV02 — default Windows template, x86_64</figcaption>
+    </figure>
+        <figure class="screenshot">
+      <img src="assets/screenshots/screenshot-095.jpg" alt="SRV02 first boot — Windows Server 2022 setup begins" loading="lazy">
+      <figcaption>SRV02 first boot — Windows Server 2022 setup begins</figcaption>
+    </figure>
+        <figure class="screenshot">
+      <img src="assets/screenshots/screenshot-096.jpg" alt="Windows Server 2022 edition selection for SRV02" loading="lazy">
+      <figcaption>Windows Server 2022 edition selection for SRV02</figcaption>
+    </figure>
+        <figure class="screenshot">
+      <img src="assets/screenshots/screenshot-097.jpg" alt="Drive 0 selected for OS installation" loading="lazy">
+      <figcaption>Drive 0 selected for OS installation</figcaption>
+    </figure>
+        <figure class="screenshot">
+      <img src="assets/screenshots/screenshot-098.jpg" alt="Windows Server 2022 installation progress on SRV02" loading="lazy">
+      <figcaption>Windows Server 2022 installation progress on SRV02</figcaption>
+    </figure>
+        <figure class="screenshot">
+      <img src="assets/screenshots/screenshot-099.jpg" alt="SRV02 first boot completing service initialization" loading="lazy">
+      <figcaption>SRV02 first boot completing service initialization</figcaption>
+    </figure>
+        <figure class="screenshot">
+      <img src="assets/screenshots/screenshot-100.jpg" alt="SRV02 login screen — first boot after Windows Server 2022 install" loading="lazy">
+      <figcaption>SRV02 login screen — first boot after Windows Server 2022 install</figcaption>
+    </figure>
+        <figure class="screenshot">
+      <img src="assets/screenshots/screenshot-101.jpg" alt="Server Manager on SRV02 — local server properties on first login" loading="lazy">
+      <figcaption>Server Manager on SRV02 — local server properties on first login</figcaption>
+    </figure>
+        <figure class="screenshot">
+      <img src="assets/screenshots/screenshot-102.jpg" alt="Member server renamed to lab convention — restart required" loading="lazy">
+      <figcaption>Member server renamed to lab convention — restart required</figcaption>
+    </figure>
+        <figure class="screenshot">
+      <img src="assets/screenshots/screenshot-103.jpg" alt="Member server successfully joined to the lab domain" loading="lazy">
+      <figcaption>Member server successfully joined to the lab domain</figcaption>
+    </figure>
+        <figure class="screenshot">
+      <img src="assets/screenshots/screenshot-104.jpg" alt="Logging into SRV02 with domain authentication" loading="lazy">
+      <figcaption>Logging into SRV02 with domain authentication</figcaption>
+    </figure>
+        <figure class="screenshot">
+      <img src="assets/screenshots/screenshot-105.jpg" alt="Static IP and DNS configured on SRV02 — pointing to the domain controller" loading="lazy">
+      <figcaption>Static IP and DNS configured on SRV02 — pointing to the domain controller</figcaption>
+    </figure>
+        <figure class="screenshot">
+      <img src="assets/screenshots/screenshot-106.jpg" alt="SRV02 network adapter — static IP and DNS settings confirmed" loading="lazy">
+      <figcaption>SRV02 network adapter — static IP and DNS settings confirmed</figcaption>
+    </figure>
+        <figure class="screenshot">
+      <img src="assets/screenshots/screenshot-107.jpg" alt="Re-applying static IPv4 on SRV02 post-domain join" loading="lazy">
+      <figcaption>Re-applying static IPv4 on SRV02 post-domain join</figcaption>
+    </figure>
+        <figure class="screenshot">
+      <img src="assets/screenshots/screenshot-108.jpg" alt="ipconfig confirms static IP and gateway on SRV02" loading="lazy">
+      <figcaption>ipconfig confirms static IP and gateway on SRV02</figcaption>
+    </figure>
+        <figure class="screenshot">
+      <img src="assets/screenshots/screenshot-109.jpg" alt="DHCP reservation for SRV02 created in DHCP Manager" loading="lazy">
+      <figcaption>DHCP reservation for SRV02 created in DHCP Manager</figcaption>
+    </figure>
+      </div>
+    </div>
+  </div>
+
+  <!-- PHASE 5 -->
+  <div class="task-block" id="phase5">
+    <div class="task-header">
+      <span class="task-num">PHASE 05</span>
+      <span class="task-title">Organizational Units, Users &amp; Security Groups</span>
+    </div>
+    <div class="task-body">
+      <p class="task-story">
+        Active Directory's power comes from organization. I opened <strong>Active Directory Users and Computers (ADUC)</strong> on the domain controller and built a full OU hierarchy under <code>lab.local</code>: <strong>Toronto</strong>, <strong>Montreal</strong>, <strong>Servers</strong>, <strong>Workstations</strong>, <strong>Groups</strong>, and <strong>Users</strong> — mirroring how a real enterprise organizes its directory structure by geography and function.
+      </p>
+      <p class="task-story">
+        Inside each location OU, I created user accounts with proper UPN suffixes (<code>lab user account</code>, <code>lab user account</code>), enforced first-logon account-change policies, and built <strong>Global Security Groups</strong> — <strong>Toronto-Users</strong> and <strong>Montreal-Users</strong> — adding each user to their respective group. This group structure would directly drive NTFS permissions and GPO filtering later.
+      </p>
+      <div class="screenshots cols-3">
+        <figure class="screenshot">
+      <img src="assets/screenshots/screenshot-110.jpg" alt="ADUC open — default domain container lab.local" loading="lazy">
+      <figcaption>ADUC open — default domain container lab.local</figcaption>
+    </figure>
+        <figure class="screenshot">
+      <img src="assets/screenshots/screenshot-111.jpg" alt="OU creation — Montreal and Toronto OUs being built" loading="lazy">
+      <figcaption>OU creation — Montreal and Toronto OUs being built</figcaption>
+    </figure>
+        <figure class="screenshot">
+      <img src="assets/screenshots/screenshot-112.jpg" alt="Toronto OU with Computers sub-OU visible" loading="lazy">
+      <figcaption>Toronto OU with Computers sub-OU visible</figcaption>
+    </figure>
+        <figure class="screenshot">
+      <img src="assets/screenshots/screenshot-113.jpg" alt="Montreal OU and Computers sub-OU structure confirmed" loading="lazy">
+      <figcaption>Montreal OU and Computers sub-OU structure confirmed</figcaption>
+    </figure>
+        <figure class="screenshot">
+      <img src="assets/screenshots/screenshot-114.jpg" alt="Final OU structure: Montreal, Toronto, Servers, Workstations, Groups, Users" loading="lazy">
+      <figcaption>Final OU structure: Montreal, Toronto, Servers, Workstations, Groups, Users</figcaption>
+    </figure>
+        <figure class="screenshot">
+      <img src="assets/screenshots/screenshot-115.jpg" alt="New user creation — lab user account in Montreal OU" loading="lazy">
+      <figcaption>New user creation — lab user account in Montreal OU</figcaption>
+    </figure>
+        <figure class="screenshot">
+      <img src="assets/screenshots/screenshot-116.jpg" alt="Account policy for Montreal user — change at next logon enabled" loading="lazy">
+      <figcaption>Account policy for Montreal user — change at next logon enabled</figcaption>
+    </figure>
+        <figure class="screenshot">
+      <img src="assets/screenshots/screenshot-117.jpg" alt="Montreal user account successfully created" loading="lazy">
+      <figcaption>Montreal user account successfully created</figcaption>
+    </figure>
+        <figure class="screenshot">
+      <img src="assets/screenshots/screenshot-118.jpg" alt="Montreal OU showing lab user object" loading="lazy">
+      <figcaption>Montreal OU showing lab user object</figcaption>
+    </figure>
+        <figure class="screenshot">
+      <img src="assets/screenshots/screenshot-119.jpg" alt="Creating Toronto user — lab user account" loading="lazy">
+      <figcaption>Creating Toronto user — lab user account</figcaption>
+    </figure>
+        <figure class="screenshot">
+      <img src="assets/screenshots/screenshot-120.jpg" alt="Toronto OU showing lab user object" loading="lazy">
+      <figcaption>Toronto OU showing lab user object</figcaption>
+    </figure>
+        <figure class="screenshot">
+      <img src="assets/screenshots/screenshot-121.jpg" alt="Creating Toronto-Users security group — Global/Security type" loading="lazy">
+      <figcaption>Creating Toronto-Users security group — Global/Security type</figcaption>
+    </figure>
+        <figure class="screenshot">
+      <img src="assets/screenshots/screenshot-122.jpg" alt="Toronto-Users group successfully created in Groups OU" loading="lazy">
+      <figcaption>Toronto-Users group successfully created in Groups OU</figcaption>
+    </figure>
+        <figure class="screenshot">
+      <img src="assets/screenshots/screenshot-123.jpg" alt="Adding lab user to Toronto-Users group" loading="lazy">
+      <figcaption>Adding lab user to Toronto-Users group</figcaption>
+    </figure>
+        <figure class="screenshot">
+      <img src="assets/screenshots/screenshot-124.jpg" alt="Toronto user confirmed as member of Toronto-Users" loading="lazy">
+      <figcaption>Toronto user confirmed as member of Toronto-Users</figcaption>
+    </figure>
+        <figure class="screenshot">
+      <img src="assets/screenshots/screenshot-125.jpg" alt="Both Toronto-Users and Montreal-Users groups visible in Groups OU" loading="lazy">
+      <figcaption>Both Toronto-Users and Montreal-Users groups visible in Groups OU</figcaption>
+    </figure>
+        <figure class="screenshot">
+      <img src="assets/screenshots/screenshot-126.jpg" alt="Montreal-Users group membership — lab user added" loading="lazy">
+      <figcaption>Montreal-Users group membership — lab user added</figcaption>
+    </figure>
+      </div>
+    </div>
+  </div>
+
+  <!-- PHASE 6 -->
+  <div class="task-block" id="phase6">
+    <div class="task-header">
+      <span class="task-num">PHASE 06</span>
+      <span class="task-title">Group Policy Objects — Lockdown Policy &amp; Domain Account Policy</span>
+    </div>
+    <div class="task-body">
+      <p class="task-story">
+        Group Policy is the central nervous system of Windows domain management. I configured lab policy settings to validate workstation/user policy behavior, including a UI restriction policy and a <strong>domain-wide account policy</strong> enforcing complexity, minimum length, history, and account lockout.
+      </p>
+      <p class="task-story">
+        I opened the <strong>Group Policy Management Console (GPMC)</strong>, created a lab lockdown GPO, and validated policy application from the workstation. Inside the policy editor, I navigated through Administrative Templates and enabled a UI restriction. For the account policy, I modified the Default Domain Policy: minimum length, complexity, maximum password age, and account lockout after repeated failed attempts.
+      </p>
+      <p class="task-story">
+        After applying changes with <code>gpupdate /force</code>, I ran <code>gpresult /r</code> on the workstation to confirm policy receipt. I then deliberately triggered the account lockout with repeated failed sign-in attempts, validating the lockout behavior in the lab. In production, user-side restrictions would be linked to the proper user OU or implemented with loopback processing where computer-targeted scope is required.
+      </p>
+      <div class="screenshots cols-3">
+        <figure class="screenshot">
+      <img src="assets/screenshots/screenshot-127.jpg" alt="Group Policy Management Console open — lab.local domain structure" loading="lazy">
+      <figcaption>Group Policy Management Console open — lab.local domain structure</figcaption>
+    </figure>
+        <figure class="screenshot">
+      <img src="assets/screenshots/screenshot-128.jpg" alt="Default Domain Policy — GPO tree structure viewed" loading="lazy">
+      <figcaption>Default Domain Policy — GPO tree structure viewed</figcaption>
+    </figure>
+        <figure class="screenshot">
+      <img src="assets/screenshots/screenshot-129.jpg" alt="Account policy settings — history, minimum length, complexity visible" loading="lazy">
+      <figcaption>Account policy settings — history, minimum length, complexity visible</figcaption>
+    </figure>
+        <figure class="screenshot">
+      <img src="assets/screenshots/screenshot-130.jpg" alt="TOR-UserLockdown-GPO linked to Toronto → Computers OU" loading="lazy">
+      <figcaption>TOR-UserLockdown-GPO linked to Toronto → Computers OU</figcaption>
+    </figure>
+        <figure class="screenshot">
+      <img src="assets/screenshots/screenshot-131.jpg" alt="GPO Scope confirmed — Authenticated Users in security filtering" loading="lazy">
+      <figcaption>GPO Scope confirmed — Authenticated Users in security filtering</figcaption>
+    </figure>
+        <figure class="screenshot">
+      <img src="assets/screenshots/screenshot-132.jpg" alt="GPO editor — Administrative Templates → Control Panel open" loading="lazy">
+      <figcaption>GPO editor — Administrative Templates → Control Panel open</figcaption>
+    </figure>
+        <figure class="screenshot">
+      <img src="assets/screenshots/screenshot-133.jpg" alt="Prevent changing Start Menu background — Enabled" loading="lazy">
+      <figcaption>Prevent changing Start Menu background — Enabled</figcaption>
+    </figure>
+        <figure class="screenshot">
+      <img src="assets/screenshots/screenshot-134.jpg" alt="Account policy applied — min length 7, complexity on, max age 42 days" loading="lazy">
+      <figcaption>Account policy applied — min length 7, complexity on, max age 42 days</figcaption>
+    </figure>
+        <figure class="screenshot">
+      <img src="assets/screenshots/screenshot-135.jpg" alt="Account Lockout Policy — 5 failed attempts, 15 min lockout" loading="lazy">
+      <figcaption>Account Lockout Policy — 5 failed attempts, 15 min lockout</figcaption>
+    </figure>
+        <figure class="screenshot">
+      <img src="assets/screenshots/screenshot-136.jpg" alt="gpupdate /force executed in PowerShell on domain controller" loading="lazy">
+      <figcaption>gpupdate /force executed in PowerShell on domain controller</figcaption>
+    </figure>
+        <figure class="screenshot">
+      <img src="assets/screenshots/screenshot-137.jpg" alt="gpresult /r on workstation — Default Domain Policy and custom GPO applied" loading="lazy">
+      <figcaption>gpresult /r on workstation — Default Domain Policy and custom GPO applied</figcaption>
+    </figure>
+        <figure class="screenshot">
+      <img src="assets/screenshots/screenshot-138.jpg" alt="Account lockout simulation — Toronto user locked after failed attempts" loading="lazy">
+      <figcaption>Account lockout simulation — Toronto user locked after failed attempts</figcaption>
+    </figure>
+        <figure class="screenshot">
+      <img src="assets/screenshots/screenshot-139.jpg" alt="Lockout delay confirmed — policy enforced in real time" loading="lazy">
+      <figcaption>Lockout delay confirmed — policy enforced in real time</figcaption>
+    </figure>
+      </div>
+    </div>
+  </div>
+
+  <!-- PHASE 7 -->
+  <div class="task-block" id="phase7">
+    <div class="task-header">
+      <span class="task-num">PHASE 07</span>
+      <span class="task-title">File Services — CompanyShare Folder with NTFS &amp; Share Permissions</span>
+    </div>
+    <div class="task-body">
+      <p class="task-story">
+        File sharing in a domain environment brings together everything built so far: users, groups, permissions, and the servers. I created a <strong>CompanyShare</strong> folder in the domain lab, shared it over the network, and configured layered share and NTFS permissions for the Toronto and Montreal security groups. Administrators retained Full Control.
+      </p>
+      <p class="task-story">
+        From the workstation, I mapped <strong>Drive Z:</strong> using a domain user account and tested file access behavior to confirm the restrictions were applied.
+      </p>
+      <div class="screenshots cols-3">
+        <figure class="screenshot">
+      <img src="assets/screenshots/screenshot-140.jpg" alt="CompanyShare folder created under C:\ in the domain lab" loading="lazy">
+      <figcaption>CompanyShare folder created under C:\ in the domain lab</figcaption>
+    </figure>
+        <figure class="screenshot">
+      <img src="assets/screenshots/screenshot-141.jpg" alt="Share permissions — Toronto-Users granted Read access" loading="lazy">
+      <figcaption>Share permissions — Toronto-Users granted Read access</figcaption>
+    </figure>
+        <figure class="screenshot">
+      <img src="assets/screenshots/screenshot-142.jpg" alt="Share permissions — Montreal-Users granted Change + Read" loading="lazy">
+      <figcaption>Share permissions — Montreal-Users granted Change + Read</figcaption>
+    </figure>
+        <figure class="screenshot">
+      <img src="assets/screenshots/screenshot-143.jpg" alt="NTFS permissions — Toronto-Users assigned Modify + Read" loading="lazy">
+      <figcaption>NTFS permissions — Toronto-Users assigned Modify + Read</figcaption>
+    </figure>
+        <figure class="screenshot">
+      <img src="assets/screenshots/screenshot-144.jpg" alt="NTFS permissions — Montreal-Users granted Modify + Read" loading="lazy">
+      <figcaption>NTFS permissions — Montreal-Users granted Modify + Read</figcaption>
+    </figure>
+        <figure class="screenshot">
+      <img src="assets/screenshots/screenshot-145.jpg" alt="Drive Z mapped on workstation using a domain user" loading="lazy">
+      <figcaption>Drive Z mapped on workstation using a domain user</figcaption>
+    </figure>
+        <figure class="screenshot">
+      <img src="assets/screenshots/screenshot-146.jpg" alt="Access restriction test — file creation attempt blocked" loading="lazy">
+      <figcaption>Access restriction test — file creation attempt blocked</figcaption>
+    </figure>
+      </div>
+    </div>
+  </div>
+
+  <!-- PHASE 8 -->
+  <div class="task-block" id="phase8">
+    <div class="task-header">
+      <span class="task-num">PHASE 08</span>
+      <span class="task-title">DNS Configuration &amp; External Resolution Testing</span>
+    </div>
+    <div class="task-body">
+      <p class="task-story">
+        DNS is the backbone of an Active Directory domain — without it, nothing resolves. I opened <strong>DNS Manager</strong> on the domain controller, reviewed the server's network interface bindings, and configured an <strong>external DNS forwarder</strong> to handle queries outside the lab namespace.
+      </p>
+      <div class="tech-note">
+        <span class="tech-note-icon">ℹ</span>
+        <p>External forwarder validation was limited in this lab because UTM on Apple Silicon used NAT-only networking. Internal AD DNS behavior remained the main validation target, while external lookup behavior was documented as a platform constraint rather than treated as production-ready DNS validation.</p>
+      </div>
+      <div class="screenshots cols-3">
+        <figure class="screenshot">
+      <img src="assets/screenshots/screenshot-147.jpg" alt="DNS Manager open on LAB-DC01 — server interfaces reviewed" loading="lazy">
+      <figcaption>DNS Manager open on LAB-DC01 — server interfaces reviewed</figcaption>
+    </figure>
+        <figure class="screenshot">
+      <img src="assets/screenshots/screenshot-148.jpg" alt="DNS Forwarders — external resolver configured for lab testing" loading="lazy">
+      <figcaption>DNS Forwarders — external resolver configured for lab testing</figcaption>
+    </figure>
+        <figure class="screenshot">
+      <img src="assets/screenshots/screenshot-149.jpg" alt="nslookup test — timeout expected due to UTM NAT-only networking" loading="lazy">
+      <figcaption>nslookup test — timeout expected due to UTM NAT-only networking</figcaption>
+    </figure>
+        <figure class="screenshot">
+      <img src="assets/screenshots/screenshot-150.jpg" alt="DNS zones visible — lab.local forward and reverse lookup zones" loading="lazy">
+      <figcaption>DNS zones visible — lab.local forward and reverse lookup zones</figcaption>
+    </figure>
+      </div>
+    </div>
+  </div>
+
+  <!-- PHASE 9 -->
+  <div class="task-block" id="phase9">
+    <div class="task-header">
+      <span class="task-num">PHASE 09</span>
+      <span class="task-title">Workstation Integration — Joining the Lab Domain &amp; Verifying Services</span>
+    </div>
+    <div class="task-body">
+      <p class="task-story">
+        The final proof of a working domain is the workstation. I configured the Windows 11 VM (<code>LAB-WS01</code>) with DNS pointing to the domain controller, verified a successful <code>ping</code> to the DC, and ran <code>nslookup</code> to confirm name resolution. The domain join prompt required domain authentication — and returned the "<strong>Welcome to the lab domain</strong>" confirmation.
+      </p>
+      <p class="task-story">
+        Post-join, the workstation received its DHCP-assigned IP, applied both computer and user GPOs (confirmed via <code>gpresult /r</code>), and successfully connected to the CompanyShare folder. Every service built throughout this case study — DHCP, DNS, AD DS, GPO, file sharing — was verified to be working end-to-end from a domain-joined client.
+      </p>
+      <div class="screenshots cols-3">
+        <figure class="screenshot">
+      <img src="assets/screenshots/screenshot-151.jpg" alt="Workstation system properties — hostname LAB-WS01, currently in WORKGROUP" loading="lazy">
+      <figcaption>Workstation system properties — hostname LAB-WS01, currently in WORKGROUP</figcaption>
+    </figure>
+        <figure class="screenshot">
+      <img src="assets/screenshots/screenshot-152.jpg" alt="ipconfig — workstation lease and DNS settings verified" loading="lazy">
+      <figcaption>ipconfig — workstation lease and DNS settings verified</figcaption>
+    </figure>
+        <figure class="screenshot">
+      <img src="assets/screenshots/screenshot-153.jpg" alt="Ping to domain controller — successful, network confirmed" loading="lazy">
+      <figcaption>Ping to domain controller — successful, network confirmed</figcaption>
+    </figure>
+        <figure class="screenshot">
+      <img src="assets/screenshots/screenshot-154.jpg" alt="Domain join prompt — completing lab.local authentication" loading="lazy">
+      <figcaption>Domain join prompt — completing lab.local authentication</figcaption>
+    </figure>
+        <figure class="screenshot">
+      <img src="assets/screenshots/screenshot-155.jpg" alt="Welcome to the lab domain — domain join confirmed" loading="lazy">
+      <figcaption>Welcome to the lab domain — domain join confirmed</figcaption>
+    </figure>
+        <figure class="screenshot">
+      <img src="assets/screenshots/screenshot-156.jpg" alt="DHCP verification — ipconfig /all showing correct lease from Toronto scope" loading="lazy">
+      <figcaption>DHCP verification — ipconfig /all showing correct lease from Toronto scope</figcaption>
+    </figure>
+        <figure class="screenshot">
+      <img src="assets/screenshots/screenshot-157.jpg" alt="gpupdate /force on workstation — policies refreshed" loading="lazy">
+      <figcaption>gpupdate /force on workstation — policies refreshed</figcaption>
+    </figure>
+        <figure class="screenshot">
+      <img src="assets/screenshots/screenshot-158.jpg" alt="gpresult /r — Default Domain Policy and TOR-UserLockdown-GPO both applied" loading="lazy">
+      <figcaption>gpresult /r — Default Domain Policy and TOR-UserLockdown-GPO both applied</figcaption>
+    </figure>
+      </div>
+    </div>
+  </div>
+
+</section>
+
+<div class="divider"></div>
+
+<!-- CONCLUSION -->
+<div class="conclusion" id="conclusion">
+  <div class="conclusion-inner">
+    <div class="hero-label" style="justify-content: center;">Project Reflection</div>
+    <h2>What This Built in Me</h2>
+    <p>These two case studies weren't just coursework — they were a complete walkthrough of the enterprise Windows stack from both ends. On the client side, I learned how IT teams provision, harden, and manage endpoints at scale. On the server side, I built the infrastructure those endpoints connect to.</p>
+    <p>Working within hardware constraints — Apple Silicon, UTM's NAT networking — forced me to understand <em>why</em> configurations are done the way they are, not just <em>how</em> to click through wizards. Every limitation I documented taught me something a lab manual couldn't.</p>
+    <p>The skills demonstrated here are foundational systems administration work: AD DS, DHCP, GPO, NTFS permissions, PowerShell, Storage Spaces, provisioning packages, and verification discipline.</p>
+
+    <div class="skills-grid">
+      <div class="skill-item">
+        <h4>Active Directory & Identity</h4>
+        <p>Forest creation, DC promotion, OU hierarchy, user/group administration, ADUC</p>
+      </div>
+      <div class="skill-item">
+        <h4>Network Services</h4>
+        <p>DHCP multi-scope design, static IP assignment, DNS configuration, forwarders</p>
+      </div>
+      <div class="skill-item">
+        <h4>Group Policy</h4>
+        <p>GPO creation, linking, Administrative Templates, account policy, lockout simulation</p>
+      </div>
+      <div class="skill-item">
+        <h4>Storage & File Services</h4>
+        <p>Storage Spaces 2-way mirror, CompanyShare, NTFS + share permission layering</p>
+      </div>
+      <div class="skill-item">
+        <h4>Endpoint Administration</h4>
+        <p>Windows 11 deployment, provisioning packages, local security policy, File History</p>
+      </div>
+      <div class="skill-item">
+        <h4>PowerShell</h4>
+        <p>Static IP assignment, gpupdate /force, Export-StartLayout, verification commands</p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<footer>
+  <p>WINDOWS ENDPOINT & SERVER ADMINISTRATION LAB · PUBLIC EVIDENCE REDACTED</p>
+  <p>GITHUB: RAHATISLAMANIK-SPEC · LINKEDIN: RAHATISLAMANIK</p>
+</footer>
+
+
+<div style="text-align:center; padding:16px; font-size:0.82rem; color:#888;">
+  <a href="https://linkedin.com/in/rahatislamanik" style="color:#0078D4; text-decoration:none;">LinkedIn</a> &nbsp;·&nbsp;
+  <a href="https://github.com/rahatislamanik-spec" style="color:#0078D4; text-decoration:none;">GitHub</a>
+</div>
+</body>
+</html>
